@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  base: '/MakiMath-Docs/',
   title: "MakiMath Documents",
   description: "A structured learning companion for mathematics",
   themeConfig: {
