@@ -35,7 +35,6 @@ MakiMath 采用清晰的多工程模块化组织：
 |---|---|---|
 | **[MakiMath-Frontend](https://github.com/new-maki-math/MakiMath-Frontend)** | Vue 3 + Vite 8 + D3 + Typlet | 核心前端应用：包含讲义阅读器、知识图谱、编者工作台与平台管理后台 |
 | **[MakiMath-Backend](https://github.com/new-maki-math/MakiMath-Backend)** | Fastify 5 + PostgreSQL 16 | 异步高性能后端：拓扑排序、Typst AST 转换、全文检索、JWT 会话与审计 |
-| **[SecureCorePackage](https://github.com/new-maki-math/SecureCorePackage)** | 内部安全支持库 | 负责数据安全封装与底层网络通信支持 |
 | **[MakiMath-Docs](https://github.com/new-maki-math/MakiMath-Docs)** | VitePress 2 | 官方中英双语技术文档站与开发指南 |
 ## 下一步
 

@@ -30,7 +30,6 @@ MakiMath is modularized into distinct focused repositories:
 |---|---|---|
 | **[MakiMath-Frontend](https://github.com/new-maki-math/MakiMath-Frontend)** | Vue 3 + Vite 8 + D3 + Typlet | Core frontend application: Lecture reader, knowledge graph, editor workbench, and platform admin panel |
 | **[MakiMath-Backend](https://github.com/new-maki-math/MakiMath-Backend)** | Fastify 5 + PostgreSQL 16 | High-performance asynchronous backend: Topological sorting, Typst AST parsing, full-text search, and audit trails |
-| **[SecureCorePackage](https://github.com/new-maki-math/SecureCorePackage)** | Internal Security Helper | Internal module for network communication and data packaging support |
 | **[MakiMath-Docs](https://github.com/new-maki-math/MakiMath-Docs)** | VitePress 2 | Official bilingual technical documentation and developer guides |
 
 ---

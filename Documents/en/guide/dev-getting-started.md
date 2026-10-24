@@ -32,10 +32,7 @@ git clone https://github.com/new-maki-math/MakiMath-Backend.git
 # 2. Frontend
 git clone https://github.com/new-maki-math/MakiMath-Frontend.git
 
-# 3. Security core
-git clone https://github.com/new-maki-math/SecureCorePackage.git
-
-# 4. Documentation
+# 3. Documentation
 git clone https://github.com/new-maki-math/MakiMath-Docs.git
 ```
 ## 2. Configure & Run Backend (`MakiMath-Backend`)

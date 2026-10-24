@@ -32,10 +32,7 @@ git clone https://github.com/new-maki-math/MakiMath-Backend.git
 # 2. 前端工程
 git clone https://github.com/new-maki-math/MakiMath-Frontend.git
 
-# 3. 加密安全核心
-git clone https://github.com/new-maki-math/SecureCorePackage.git
-
-# 4. 文档工程
+# 3. 文档工程
 git clone https://github.com/new-maki-math/MakiMath-Docs.git
 ```
 ## 2. 后端服务本地运行 (`MakiMath-Backend`)
