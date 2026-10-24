@@ -2,8 +2,6 @@
 
 MakiMath services are configured via `.env` files or system environment variables. Under Node.js 22+, native `--env-file` loading is fully supported.
 
----
-
 ## Backend Environment Variables (`maki-math-backend`)
 
 ### 1. Server & Network Configurations
@@ -15,8 +13,6 @@ MakiMath services are configured via `.env` files or system environment variable
 | `TRUST_PROXY` | `loopback` | No | Reverse proxy trust level:<br>• `loopback` (recommended): Trust local Nginx; extracts real client IP from the rightmost `X-Forwarded-For`;<br>• `false`: Disable proxy trust; reads direct socket IP;<br>• CIDR (e.g. `10.0.0.0/8`): For separate reverse proxy instances. |
 | `LOG_LEVEL` | `info` | No | Logging verbosity (`fatal`, `error`, `warn`, `info`, `debug`, `trace`). |
 
----
-
 ### 2. PostgreSQL Database Connection
 
 | Variable | Default | Required | Description |
@@ -27,8 +23,6 @@ MakiMath services are configured via `.env` files or system environment variable
 | `PGPASSWORD` | `""` | Yes | Database user password. A strong password is required for production. |
 | `PGDATABASE` | `maki_math_dev` | Yes | Target database name (`maki_math` for production). |
 
----
-
 ### 3. JWT Authentication & Sessions
 
 | Variable | Default | Required | Description |
@@ -36,8 +30,6 @@ MakiMath services are configured via `.env` files or system environment variable
 | `JWT_SECRET` | Internal dev key | **Yes (Prod)** | Secret key used to sign and verify Access Tokens. Generate via `openssl rand -hex 32`. |
 | `JWT_EXPIRES_IN` | `2h` | No | Access Token validity duration (`15m`, `2h`, `1d`). |
 | `JWT_REFRESH_EXPIRES_IN` | `7d` | No | Refresh Token lifecycle duration (default 7 days). |
-
----
 
 ### 4. Communication & Storage Paths
 
@@ -47,8 +39,6 @@ MakiMath services are configured via `.env` files or system environment variable
 | `TYPST_BIN` | `typst` | No | Path to Typst CLI executable if not on system PATH. |
 | `CACHE_DIR` | `<root>/cache` | No | Server temporary compilation cache directory. |
 | `UPLOAD_DIR` | `<root>/uploads` | No | Storage root for uploaded attachments. |
-
----
 
 ## Production `.env` Template
 
@@ -74,8 +64,6 @@ JWT_REFRESH_EXPIRES_IN=7d
 # ---------- Communication Security ----------
 PAYLOAD_SECRET_KEY=9a3f2b8c1e7d4a0f8b2c6e1d5a9f3b7c
 ```
-
----
 
 ## Frontend Environment Variables (`maki-math-frontend`)
 

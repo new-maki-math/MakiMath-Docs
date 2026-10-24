@@ -2,8 +2,6 @@
 
 Welcome to the MakiMath open-source community! Whether you are fixing bugs, proposing new features, authoring mathematics lectures, or improving bilingual documentation, we appreciate your contributions.
 
----
-
 ## Contribution Workflow
 
 ### 1. Standard Code Contribution Flow
@@ -30,8 +28,6 @@ Welcome to the MakiMath open-source community! Whether you are fixing bugs, prop
    Follow the [Git Rules & Commit Conventions](./git-rules.md).
 6. **Push & Open a Pull Request**:
    Push your branch and submit a PR against `main` on the official repository.
-
----
 
 ## Local Development Setup
 
@@ -65,15 +61,11 @@ pnpm run docs:build
 ```
 Documentation dev server runs at `http://localhost:5173`.
 
----
-
 ## Reporting Issues & Feedback
 
 Before creating an issue, search closed and ongoing issues:
 - **Bug Reports**: Provide minimal reproducible steps, OS, browser version, and terminal/console logs.
 - **Feature Requests**: Outline clear user stories, proposed workflows, and pedagogical benefits.
-
----
 
 ## Code of Conduct
 

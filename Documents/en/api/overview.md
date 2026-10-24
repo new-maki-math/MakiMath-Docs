@@ -2,8 +2,6 @@
 
 MakiMath backend services adhere to a modular RESTful architecture. This document provides core API specifications, request conventions, error codes, and the **Master API & Permission Reference Table**.
 
----
-
 ## Protocols & Global Conventions
 
 - **Base Endpoint URL**: All service endpoints are mounted under `/api` (e.g. `https://api.makimath.com/api/courses`).
@@ -15,8 +13,6 @@ MakiMath backend services adhere to a modular RESTful architecture. This documen
 - **Naming Conventions**:
   - URL paths and query parameters: `snake_case` (e.g., `category_id`, `course_id`).
   - Request/Response JSON keys: Follow documented endpoint definitions.
-
----
 
 ## Master API & Permission Reference Table
 
@@ -92,8 +88,6 @@ The table below outlines endpoint accessibility across all three roles:
 > - `✅`: Full global access.
 > - `✅*`: Accessible by Course Editors, restricted to their assigned courses (`requireCourseEditor`).
 > - `-`: Forbidden (returns `401 Unauthorized` or `403 Forbidden`).
-
----
 
 ## Standard Responses & Error Formats
 

@@ -2,8 +2,6 @@
 
 MakiMath 前端单页应用（代码位于 `maki-math-frontend` / `maki-math-re`）基于 Vue 3.5 与 Vite 8 构建。前端摆脱了笨重第三方 UI 库的包袱，采用全自研轻量级组件系统与 WebAssembly 矢量排版引擎，实现了极致的交互性能与高保真数学排版。
 
----
-
 ## 前端技术选型
 
 ![前端技术架构与模块划分](/images/arch-frontend.svg)
@@ -13,8 +11,6 @@ MakiMath 前端单页应用（代码位于 `maki-math-frontend` / `maki-math-re`
 - **图谱引擎**：`d3`（v7），用于课程前置依赖的有向无环图力导向与层级排版推导。
 - **设计与主题系统**：自研轻量 CSS 主题系统（`style-light.css` / `style-dark.css`），原生支持深浅色无缝自适应切换。
 - **字体资产**：集成 `@fontsource/noto-sans-sc`，保证跨操作系统（Windows / macOS / Linux）中文与数学符号的高品质统一渲染。
-
----
 
 ## 目录结构与模块划分
 
@@ -45,8 +41,6 @@ maki-math-re/src/
 └── main.js                # 入口初始化文件
 ```
 
----
-
 ## 核心系统设计
 
 ### 1. 讲义矢量渲染引擎 (`TypstDoc.vue`)
@@ -73,8 +67,6 @@ maki-math-re/src/
 - **交互与高亮**：
   - 点击节点高亮其“直接前置依赖路径”与“后续解锁路径”。
   - 支持画布置中、平移与滚轮缩放，为学习者提供清晰的学习导航。
-
----
 
 ## 通信与安全处理
 

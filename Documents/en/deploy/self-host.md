@@ -2,8 +2,6 @@
 
 MakiMath supports full-featured private deployment on independent Linux instances, virtual machines, or bare-metal servers. This guide covers both automated script installation and manual step-by-step production configuration.
 
----
-
 ## System Requirements
 
 - **Operating System**: Ubuntu 22.04 / 24.04 LTS or Debian 12 recommended
@@ -11,8 +9,6 @@ MakiMath supports full-featured private deployment on independent Linux instance
 - **Package Manager**: pnpm >= 9.0 or npm >= 10.0
 - **Database**: PostgreSQL >= 16 with `postgresql-contrib` (for `pg_trgm` fuzzy indexing)
 - **Web Gateway & Process Manager**: Nginx, PM2
-
----
 
 ## Method A: Automated Deployment Script (Recommended)
 
@@ -50,8 +46,6 @@ node scripts/deploy.js
 cd ../maki-math-frontend
 node scripts/deploy.js
 ```
-
----
 
 ## Method B: Manual Step-by-Step Installation
 
@@ -122,8 +116,6 @@ sudo cp -r dist/* /var/www/maki-math/frontend/
 
 ### 4. Configure Nginx
 Refer to the [Nginx Reverse Proxy Guide](./nginx.md) for SSL and proxy configuration.
-
----
 
 ## Maintenance & Telemetry
 

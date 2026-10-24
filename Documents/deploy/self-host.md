@@ -2,8 +2,6 @@
 
 MakiMath 支持在独立 Linux 云服务器或物理服务器上进行全功能私有化部署。本文提供从单机独立安装到生产环境自动化上线的全套指南。
 
----
-
 ## 基础环境要求
 
 - **操作系统**：推荐 Ubuntu 22.04 LTS / 24.04 LTS 或 Debian 12
@@ -11,8 +9,6 @@ MakiMath 支持在独立 Linux 云服务器或物理服务器上进行全功能�
 - **包管理器**：pnpm >= 9.0 或 npm >= 10.0
 - **数据库**：PostgreSQL >= 16（必须包含 `postgresql-contrib` 扩展包，以支持 `pg_trgm` 全文模糊索引）
 - **Web 网关与守护**：Nginx、PM2
-
----
 
 ## 部署方案 A：自动化脚本一键部署 (推荐)
 
@@ -50,8 +46,6 @@ node scripts/deploy.js
 cd ../maki-math-frontend
 node scripts/deploy.js
 ```
-
----
 
 ## 部署方案 B：手动分步安装
 
@@ -122,8 +116,6 @@ sudo cp -r dist/* /var/www/maki-math/frontend/
 
 ### 4. 配置 Nginx 网关
 参考 [Nginx 反向代理配置](./nginx.md) 配置域名与证书代理。
-
----
 
 ## 运维与健康检查
 

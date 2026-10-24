@@ -2,8 +2,6 @@
 
 To maintain a clean, traceable, and automated Git history across the MakiMath ecosystem, all contributors must adhere to the following branching and commit conventions.
 
----
-
 ## Branching Strategy
 
 MakiMath follows a streamlined trunk-based branching workflow:
@@ -21,8 +19,6 @@ main (Protected Trunk) ───────────────────
 - **Fix Branches (`fix/<bug-name>`)**: Used for patch and bug fixes (e.g. `fix/audit-log-ip-parse`).
 - **Docs Branches (`docs/<topic>`)**: Used for bilingual documentation updates (e.g. `docs/api-permissions-matrix`).
 - **Refactor Branches (`refactor/<module>`)**: For architectural refactoring without functional changes (e.g. `refactor/d3-graph-layout`).
-
----
 
 ## Conventional Commits Specification
 
@@ -49,8 +45,6 @@ All commit messages must follow the [Conventional Commits](https://www.conventio
 | **`test`** | Testing | Adding or updating unit/integration tests. |
 | **`chore`** | Maintenance | Tooling, build pipeline, dependency upgrades. |
 
----
-
 ### 2. Recommended Scopes
 
 Common scopes include:
@@ -61,8 +55,6 @@ Common scopes include:
 - `workbench`: Collaborative authoring workspace
 - `crypto`: Communication middlewares
 - `deploy`: Nginx, PM2, and deployment scripts
-
----
 
 ### 3. Commit Examples
 
@@ -82,8 +74,6 @@ fix bug                  # Does not specify the defect
 WIP                      # Never merge WIP commits into main
 feat: 12345              # Meaningless description
 ```
-
----
 
 ## Security Red Lines
 

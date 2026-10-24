@@ -2,8 +2,6 @@
 
 To safeguard courseware data integrity and enforce access boundaries across network transit, MakiMath incorporates a lightweight communication security and access control mechanism.
 
----
-
 ## Core Design Considerations
 
 | Consideration | Platform Approach |
@@ -12,8 +10,6 @@ To safeguard courseware data integrity and enforce access boundaries across netw
 | **Session State Isolation** | Keys reside solely within runtime memory closures without persistent disk storage, renewing naturally upon page refresh. |
 | **Developer Transparency** | Framework interceptors and middlewares handle communication flows automatically, preserving standard JSON data interactions in business code. |
 | **Access Control (RBAC)** | Operates alongside JWT sessions and a three-tier role-based access model (Readers, Editors, Administrators) to govern API permissions. |
-
----
 
 ## Data Flow Overview
 
@@ -28,8 +24,6 @@ Application logic is decoupled from underlying communication handling. The gener
 ### 2. Server-Side Middleware
 - Fastify server plugins intercept incoming requests at framework lifecycle hooks.
 - Payloads are decoded before reaching domain route handlers, while outgoing responses are wrapped uniformly on departure.
-
----
 
 ## Access Control Model
 

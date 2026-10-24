@@ -2,8 +2,6 @@
 
 In production, Nginx serves as the unified reverse proxy gateway for MakiMath, managing SSL termination, high-performance static asset delivery, Gzip compression, and proxy routing for `/api` and `/health` requests to the Fastify backend.
 
----
-
 ## Production Nginx Configuration
 
 Create `/etc/nginx/sites-available/makimath.conf` on your server:
@@ -92,8 +90,6 @@ server {
 }
 ```
 
----
-
 ## Enable & Validate
 
 ```bash
@@ -106,8 +102,6 @@ sudo nginx -t
 # 3. Reload Nginx
 sudo systemctl reload nginx
 ```
-
----
 
 ## Automated SSL Setup with Certbot
 

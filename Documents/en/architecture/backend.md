@@ -2,13 +2,9 @@
 
 The MakiMath server application (located under `maki-math-backend`) is built on Node.js 22+ and the Fastify 5 framework. It leverages a modular microkernel design, characterized by high throughput, minimal overhead, strong typing safety, and robust database integrity constraints.
 
----
-
 ## Technical Stack & Dependencies
 
 ![Backend Architecture](/images/arch-backend-en.svg)
-
----
 
 ## Directory Hierarchy & Modules
 
@@ -37,8 +33,6 @@ maki-math-backend/src/
     ├── search.js          # Cross-entity full-text search
     └── users.js           # User management, role elevation, and account controls
 ```
-
----
 
 ## Core System Mechanisms
 

@@ -2,8 +2,6 @@
 
 This module documents endpoints for authentication, invitation redemption, session token rotation, user profile updates, and personal audit trails.
 
----
-
 ## 1. User Login
 - **Method**: `POST`
 - **Path**: `/api/auth/login`
@@ -31,8 +29,6 @@ This module documents endpoints for authentication, invitation redemption, sessi
   }
 }
 ```
-
----
 
 ## 2. Register via Invitation Code
 - **Method**: `POST`
@@ -64,8 +60,6 @@ This module documents endpoints for authentication, invitation redemption, sessi
 }
 ```
 
----
-
 ## 3. Pre-Validate Invitation Code
 - **Method**: `GET`
 - **Path**: `/api/auth/check-invite`
@@ -86,8 +80,6 @@ This module documents endpoints for authentication, invitation redemption, sessi
   "usedCount": 0
 }
 ```
-
----
 
 ## 4. Get Current User Profile
 - **Method**: `GET`
@@ -110,8 +102,6 @@ This module documents endpoints for authentication, invitation redemption, sessi
   }
 }
 ```
-
----
 
 ## 5. Refresh Access Token
 - **Method**: `POST`
@@ -140,8 +130,6 @@ This module documents endpoints for authentication, invitation redemption, sessi
 }
 ```
 
----
-
 ## 6. Logout
 - **Method**: `POST`
 - **Path**: `/api/auth/logout`
@@ -162,8 +150,6 @@ This module documents endpoints for authentication, invitation redemption, sessi
   "message": "Logged out successfully"
 }
 ```
-
----
 
 ## 7. Update Display Name
 - **Method**: `PATCH`
@@ -190,8 +176,6 @@ This module documents endpoints for authentication, invitation redemption, sessi
 }
 ```
 
----
-
 ## 8. Change Password
 - **Method**: `PATCH`
 - **Path**: `/api/auth/password`
@@ -212,8 +196,6 @@ This module documents endpoints for authentication, invitation redemption, sessi
   "message": "Password updated successfully"
 }
 ```
-
----
 
 ## 9. Get Personal Audit Logs
 - **Method**: `GET`

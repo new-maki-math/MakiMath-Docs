@@ -2,8 +2,6 @@
 
 This module documents endpoints for managing subject categories, courses, chapters, and the hierarchical workbench knowledge tree.
 
----
-
 ## 1. Get Workbench Knowledge Tree
 - **Method**: `GET`
 - **Path**: `/api/workbench/tree`
@@ -47,8 +45,6 @@ This module documents endpoints for managing subject categories, courses, chapte
   ]
 }
 ```
-
----
 
 ## 2. Categories API
 
@@ -97,8 +93,6 @@ This module documents endpoints for managing subject categories, courses, chapte
   "ids": [2, 1, 3]
 }
 ```
-
----
 
 ## 3. Courses API
 
@@ -164,8 +158,6 @@ This module documents endpoints for managing subject categories, courses, chapte
   "ids": [105, 101, 102]
 }
 ```
-
----
 
 ## 4. Chapters API
 

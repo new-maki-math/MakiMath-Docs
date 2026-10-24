@@ -2,8 +2,6 @@
 
 在生产环境中，推荐使用 Nginx 作为 MakiMath 全栈平台的统一接入网关，负责 SSL 证书终结、静态资产高效分发、Gzip 压缩，以及将 `/api` 与 `/health` 请求反向代理至 Fastify 后端服务。
 
----
-
 ## 推荐生产 Nginx 配置文件
 
 在服务器创建 `/etc/nginx/sites-available/makimath.conf`：
@@ -92,8 +90,6 @@ server {
 }
 ```
 
----
-
 ## 启用与测试配置
 
 ```bash
@@ -106,8 +102,6 @@ sudo nginx -t
 # 3. 重新加载 Nginx 服务
 sudo systemctl reload nginx
 ```
-
----
 
 ## 使用 Certbot 自动化配置免费 SSL 证书
 

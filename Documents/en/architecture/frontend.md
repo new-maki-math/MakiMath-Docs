@@ -2,8 +2,6 @@
 
 The MakiMath frontend single-page application (located under `maki-math-frontend` / `maki-math-re`) is engineered with Vue 3.5 and Vite 8. Unburdened by bulky third-party UI libraries, it employs a custom lightweight component system coupled with a WebAssembly vector typesetting engine to deliver sub-second interactions and print-grade math documents.
 
----
-
 ## Technical Stack Overview
 
 ![Frontend Architecture](/images/arch-frontend-en.svg)
@@ -13,8 +11,6 @@ The MakiMath frontend single-page application (located under `maki-math-frontend
 - **Graph Engine**: `d3` (v7) for topological hierarchy deduction and DAG prerequisite roadmap visualization.
 - **Styling & Theming**: Custom CSS design system (`style-light.css` / `style-dark.css`) supporting smooth dark/light theme switching.
 - **Typography**: `@fontsource/noto-sans-sc` guarantees consistent CJK and math symbol rendering across Windows, macOS, and Linux.
-
----
 
 ## Directory & Module Structure
 
@@ -45,8 +41,6 @@ maki-math-re/src/
 └── main.js                # App entrypoint
 ```
 
----
-
 ## Core System Architecture
 
 ### 1. Vector Typesetting Engine (`TypstDoc.vue`)
@@ -72,8 +66,6 @@ The primary content creation environment integrates three tightly synchronized p
 - Extracts course prerequisite relations and synthesizes DAG nodes and directed edges in the browser.
 - Interactive highlighting of prerequisite chains (upstream dependencies) and downstream unlocked topics.
 - Zooming, panning, and auto-centering for intuitive path exploration.
-
----
 
 ## Communication & Security Handling
 

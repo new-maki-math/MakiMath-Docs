@@ -2,8 +2,6 @@
 
 MakiMath is a high-performance, full-stack courseware platform purpose-built for modern mathematical pedagogy and academic research. It addresses three longstanding bottlenecks of traditional math platforms: linear fragmentation of knowledge, heavy/imprecise LaTeX rendering, and vulnerability to automated content scraping.
 
----
-
 ## Overall System Architecture & Core Interaction Sequence
 
 The core architecture of MakiMath is structured around two primary execution pipelines: the **Public Reader Flow** and the **Protected Editor Workbench Flow**. System modules collaborate efficiently across this sequence:
@@ -20,8 +18,6 @@ The core architecture of MakiMath is structured around two primary execution pip
 - **Version Hashing & Concurrency Safety**: Updating the Typst source recalculates the `sha256` digest to prevent concurrent overwrites.
 - **Operational Audit Trails**: Every revision records an entry into `audit_logs` for full traceability.
 
----
-
 ## Repository Ecosystem Matrix
 
 MakiMath is modularized into distinct focused repositories:
@@ -31,8 +27,6 @@ MakiMath is modularized into distinct focused repositories:
 | **[MakiMath-Frontend](https://github.com/new-maki-math/MakiMath-Frontend)** | Vue 3 + Vite 8 + D3 + Typlet | Core frontend application: Lecture reader, knowledge graph, editor workbench, and platform admin panel |
 | **[MakiMath-Backend](https://github.com/new-maki-math/MakiMath-Backend)** | Fastify 5 + PostgreSQL 16 | High-performance asynchronous backend: Topological sorting, Typst AST parsing, full-text search, and audit trails |
 | **[MakiMath-Docs](https://github.com/new-maki-math/MakiMath-Docs)** | VitePress 2 | Official bilingual technical documentation and developer guides |
-
----
 
 ## Core Data & Execution Pipelines
 

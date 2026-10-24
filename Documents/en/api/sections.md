@@ -2,8 +2,6 @@
 
 Sections are the core operational units delivering Typst lecture notes, theorem environments, and mathematical proofs. This document outlines metadata retrieval, reading endpoints, version-locked Typst persistence, DAG prerequisite networks, and batch operations.
 
----
-
 ## 1. Get Lecture Document & Pre-Parsed AST (Core Reader API)
 - **Method**: `GET`
 - **Path**: `/api/sections/:id/doc`
@@ -40,8 +38,6 @@ Sections are the core operational units delivering Typst lecture notes, theorem 
 }
 ```
 
----
-
 ## 2. List Sections by Chapter
 - **Method**: `GET`
 - **Path**: `/api/sections?chapter_id=101`
@@ -66,8 +62,6 @@ Sections are the core operational units delivering Typst lecture notes, theorem 
 ]
 ```
 
----
-
 ## 3. Save Typst Source (Concurrency Version Lock)
 - **Method**: `PUT`
 - **Path**: `/api/sections/:id/source`
@@ -91,8 +85,6 @@ Sections are the core operational units delivering Typst lecture notes, theorem 
 }
 ```
 
----
-
 ## 4. Set Section DAG Prerequisites
 - **Method**: `PUT`
 - **Path**: `/api/sections/:id/prereqs`
@@ -113,8 +105,6 @@ Sections are the core operational units delivering Typst lecture notes, theorem 
   "prereqs": [998, 999]
 }
 ```
-
----
 
 ## 5. Metadata Operations
 
@@ -152,8 +142,6 @@ Sections are the core operational units delivering Typst lecture notes, theorem 
 - **Method**: `DELETE`
 - **Path**: `/api/sections/:id`
 - **Permission**: `Course Editor (requireCourseEditor)`
-
----
 
 ## 6. Batch Operations
 

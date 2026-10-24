@@ -2,8 +2,6 @@
 
 MakiMath 是一套专为现代数学教学与科研打造的高性能全栈讲义平台。系统致力于攻克传统数学教材“线性割裂、缺乏拓扑”以及传统数学网站“LaTeX 渲染重、公式易失真、版权无保护”的三大顽疾。
 
----
-
 ## 总体系统架构与核心交互时序
 
 MakiMath 的架构核心围绕两条主交互干线展开：**面向读者的公开免登阅读流** 与 **面向编者的受限工作台编辑流**。系统各模块在此交互时序中高效协同：
@@ -20,8 +18,6 @@ MakiMath 的架构核心围绕两条主交互干线展开：**面向读者的公
 - **版本哈希与防并发覆盖**：更新讲义源码的同时写入 `sha256` 校验哈希，防止多人协作时发生意外覆盖。
 - **操作审计存证**：每次修改均向 `audit_logs` 写入审计记录，确保讲义内容变更具备完整的历史追溯能力。
 
----
-
 ## 代码仓库生态矩阵
 
 MakiMath 采用清晰的多工程模块化组织：
@@ -31,8 +27,6 @@ MakiMath 采用清晰的多工程模块化组织：
 | **[MakiMath-Frontend](https://github.com/new-maki-math/MakiMath-Frontend)** | Vue 3 + Vite 8 + D3 + Typlet | 核心前端应用：包含讲义阅读器、知识图谱、编者工作台与平台管理后台 |
 | **[MakiMath-Backend](https://github.com/new-maki-math/MakiMath-Backend)** | Fastify 5 + PostgreSQL 16 | 异步高性能后端：拓扑排序、Typst AST 转换、全文检索、JWT 会话与审计 |
 | **[MakiMath-Docs](https://github.com/new-maki-math/MakiMath-Docs)** | VitePress 2 | 官方中英双语技术文档站与开发指南 |
-
----
 
 ## 核心数据与业务流水线
 
