@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1137.493 193.8" width="1137.493" height="193.8" style="--bg:#1F1F1F;--fg:#CCCCCC;--line:#CCCCCC;--accent:#0078D4;--muted:#CCCCCCCC;--surface:#181818;--border:#CCCCCC;background:var(--bg)">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="5" refX="7" refY="2.5" orient="auto">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+  <marker id="arrowhead-start" markerWidth="8" markerHeight="5" refX="1" refY="2.5" orient="auto-start-reverse">
+    <polygon points="8 0, 0 2.5, 8 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+</defs>
+<g class="subgraph" data-id="Client" data-label="客户端 (Client)">
+  <rect x="40" y="40" width="386.2" height="113.80000000000001" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="40" y="40" width="386.2" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="52" y="54" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">客户端 (Client)</text>
+</g>
+<g class="subgraph" data-id="Network" data-label="网络传输 (Network)">
+  <rect x="486.2" y="48.45" width="179.913" height="96.9" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="486.2" y="48.45" width="179.913" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="498.2" y="62.45" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">网络传输 (Network)</text>
+</g>
+<g class="subgraph" data-id="Server" data-label="服务端 (Fastify Server)">
+  <rect x="726.113" y="40" width="371.38" height="113.80000000000001" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="726.113" y="40" width="371.38" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="738.113" y="54" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">服务端 (Fastify Server)</text>
+</g>
+<polyline class="edge" data-from="ClientInterceptor" data-to="HTTPS" data-style="solid" data-arrow-start="true" data-arrow-end="true" points="410.2,110.9 502.2,110.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="HTTPS" data-to="ServerMiddleware" data-style="solid" data-arrow-start="true" data-arrow-end="true" points="650.113,110.9 742.113,110.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="UI" data-to="ClientInterceptor" data-style="solid" data-arrow-start="true" data-arrow-end="true" points="194.28,110.9 242.28,110.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="ServerMiddleware" data-to="Route" data-style="solid" data-arrow-start="true" data-arrow-end="true" points="895.2130000000001,110.9 943.2130000000001,110.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<g class="node" data-id="UI" data-label="Vue 页面组件
+(业务数据模型)" data-shape="rectangle">
+  <rect x="56" y="84" width="138.28" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="125.14" y="110.9" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="125.14" dy="-3.9000000000000012">Vue 页面组件</tspan><tspan x="125.14" dy="16.900000000000002">(业务数据模型)</tspan></text>
+</g>
+<g class="node" data-id="ClientInterceptor" data-label="请求拦截层
+(自动序列化与封装)" data-shape="rectangle">
+  <rect x="242.28" y="84" width="167.92" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="326.24" y="110.9" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="326.24" dy="-3.9000000000000012">请求拦截层</tspan><tspan x="326.24" dy="16.900000000000002">(自动序列化与封装)</tspan></text>
+</g>
+<g class="node" data-id="HTTPS" data-label="HTTPS 通信传输" data-shape="rectangle">
+  <rect x="502.2" y="92.45" width="147.913" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="576.1565" y="110.9" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">HTTPS 通信传输</text>
+</g>
+<g class="node" data-id="ServerMiddleware" data-label="服务端中间件
+(自动校验与解析)" data-shape="rectangle">
+  <rect x="742.113" y="84" width="153.1" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="818.663" y="110.9" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="818.663" dy="-3.9000000000000012">服务端中间件</tspan><tspan x="818.663" dy="16.900000000000002">(自动校验与解析)</tspan></text>
+</g>
+<g class="node" data-id="Route" data-label="业务路由处理
+(标准业务逻辑)" data-shape="rectangle">
+  <rect x="943.2130000000001" y="84" width="138.28" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1012.3530000000001" y="110.9" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="1012.3530000000001" dy="-3.9000000000000012">业务路由处理</tspan><tspan x="1012.3530000000001" dy="16.900000000000002">(标准业务逻辑)</tspan></text>
+</g>
+</svg>

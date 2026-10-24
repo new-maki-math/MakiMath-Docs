@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1068.1840000000002 801.45" width="1068.1840000000002" height="801.45" style="--bg:#1F1F1F;--fg:#CCCCCC;--line:#CCCCCC;--accent:#0078D4;--muted:#CCCCCCCC;--surface:#181818;--border:#CCCCCC;background:var(--bg)">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="seq-arrow" markerWidth="8" markerHeight="5" refX="8" refY="2.5" orient="auto-start-reverse">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" />
+  </marker>
+  <marker id="seq-arrow-open" markerWidth="8" markerHeight="5" refX="8" refY="2.5" orient="auto-start-reverse">
+    <polyline points="0 0, 8 2.5, 0 5" fill="none" stroke="var(--_arrow)" stroke-width="1" />
+  </marker>
+</defs>
+<line class="lifeline" data-actor="Reader" x1="76.615" y1="92.45" x2="76.615" y2="771.45" stroke="var(--_line)" stroke-width="0.75" stroke-dasharray="6 4" />
+<line class="lifeline" data-actor="Editor" x1="216.615" y1="92.45" x2="216.615" y2="771.45" stroke="var(--_line)" stroke-width="0.75" stroke-dasharray="6 4" />
+<line class="lifeline" data-actor="FE" x1="392.94500000000005" y1="70" x2="392.94500000000005" y2="771.45" stroke="var(--_line)" stroke-width="0.75" stroke-dasharray="6 4" />
+<line class="lifeline" data-actor="SC" x1="572.839" y1="70" x2="572.839" y2="771.45" stroke="var(--_line)" stroke-width="0.75" stroke-dasharray="6 4" />
+<line class="lifeline" data-actor="BE" x1="760.903" y1="70" x2="760.903" y2="771.45" stroke="var(--_line)" stroke-width="0.75" stroke-dasharray="6 4" />
+<line class="lifeline" data-actor="DB" x1="984.1590000000001" y1="70" x2="984.1590000000001" y2="771.45" stroke="var(--_line)" stroke-width="0.75" stroke-dasharray="6 4" />
+<g class="message" data-from="Reader" data-to="FE" data-label="访问 /course/math-analysis/doc/sec-1" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="1">
+  <line x1="76.615" y1="112.45" x2="392.94500000000005" y2="112.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="132.78000000000003" y="94.3" width="204" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="234.78000000000003" y="102.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">访问 /course/math-analysis/doc/sec-1</text>
+  <circle class="sequence-number" cx="76.615" cy="112.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="76.615" y="112.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">1</text>
+</g>
+<g class="message" data-from="FE" data-to="BE" data-label="GET /api/sections/1/doc (未带 Token)" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="2">
+  <line x1="392.94500000000005" y1="152.45" x2="760.903" y2="152.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="476.924" y="134.29999999999998" width="200" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="576.924" y="142.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">GET /api/sections/1/doc (未带 Token)</text>
+  <circle class="sequence-number" cx="392.94500000000005" cy="152.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="392.94500000000005" y="152.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">2</text>
+</g>
+<g class="message" data-from="BE" data-to="DB" data-label="查询 section 与关联 course.status" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="3">
+  <line x1="760.903" y1="192.45" x2="984.1590000000001" y2="192.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="778.0310000000001" y="174.29999999999998" width="189" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="872.5310000000001" y="182.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">查询 section 与关联 course.status</text>
+  <circle class="sequence-number" cx="760.903" cy="192.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="760.903" y="192.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">3</text>
+</g>
+<g class="message" data-from="DB" data-to="BE" data-label="返回数据 (status = 'live')" data-line-style="dashed" data-arrow-head="filled" data-self="false" data-step="4">
+  <line x1="984.1590000000001" y1="232.45" x2="760.903" y2="232.45" stroke="var(--_line)" stroke-width="1" stroke-dasharray="6 4" marker-end="url(#seq-arrow)" />
+  <rect x="805.5310000000001" y="214.29999999999998" width="134" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="872.5310000000001" y="222.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">返回数据 (status = &#39;live&#39;)</text>
+  <circle class="sequence-number" cx="984.1590000000001" cy="232.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="984.1590000000001" y="232.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">4</text>
+</g>
+<g class="message" data-from="BE" data-to="FE" data-label="响应载荷" data-line-style="dashed" data-arrow-head="filled" data-self="false" data-step="5">
+  <line x1="760.903" y1="287.45" x2="392.94500000000005" y2="287.45" stroke="var(--_line)" stroke-width="1" stroke-dasharray="6 4" marker-end="url(#seq-arrow)" />
+  <rect x="546.424" y="269.3" width="61" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="576.924" y="277.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">响应载荷</text>
+  <circle class="sequence-number" cx="760.903" cy="287.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="760.903" y="287.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">5</text>
+</g>
+<g class="message" data-from="FE" data-to="SC" data-label="校验与解密载荷" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="6">
+  <line x1="392.94500000000005" y1="327.45" x2="572.839" y2="327.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="432.89200000000005" y="309.3" width="100" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="482.89200000000005" y="317.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">校验与解密载荷</text>
+  <circle class="sequence-number" cx="392.94500000000005" cy="327.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="392.94500000000005" y="327.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">6</text>
+</g>
+<g class="message" data-from="SC" data-to="FE" data-label="交付 AST JSON" data-line-style="dashed" data-arrow-head="filled" data-self="false" data-step="7">
+  <line x1="572.839" y1="367.45" x2="392.94500000000005" y2="367.45" stroke="var(--_line)" stroke-width="1" stroke-dasharray="6 4" marker-end="url(#seq-arrow)" />
+  <rect x="436.39200000000005" y="349.3" width="93" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="482.89200000000005" y="357.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">交付 AST JSON</text>
+  <circle class="sequence-number" cx="572.839" cy="367.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="572.839" y="367.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">7</text>
+</g>
+<g class="message" data-from="Editor" data-to="FE" data-label="编辑小节内容并点击保存" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="8">
+  <line x1="216.615" y1="449.45" x2="392.94500000000005" y2="449.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="228.78000000000003" y="431.3" width="152" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="304.78000000000003" y="439.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">编辑小节内容并点击保存</text>
+  <circle class="sequence-number" cx="216.615" cy="449.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="216.615" y="449.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">8</text>
+</g>
+<g class="message" data-from="FE" data-to="SC" data-label="封装提交数据 { source: &quot;...&quot; }" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="9">
+  <line x1="392.94500000000005" y1="489.45" x2="572.839" y2="489.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="404.89200000000005" y="471.3" width="156" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="482.89200000000005" y="479.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">封装提交数据 { source: &quot;...&quot; }</text>
+  <circle class="sequence-number" cx="392.94500000000005" cy="489.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="392.94500000000005" y="489.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">9</text>
+</g>
+<g class="message" data-from="SC" data-to="FE" data-label="交付封装载荷" data-line-style="dashed" data-arrow-head="filled" data-self="false" data-step="10">
+  <line x1="572.839" y1="529.45" x2="392.94500000000005" y2="529.45" stroke="var(--_line)" stroke-width="1" stroke-dasharray="6 4" marker-end="url(#seq-arrow)" />
+  <rect x="439.39200000000005" y="511.30000000000007" width="87" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="482.89200000000005" y="519.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">交付封装载荷</text>
+  <circle class="sequence-number" cx="572.839" cy="529.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="572.839" y="529.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">10</text>
+</g>
+<g class="message" data-from="FE" data-to="BE" data-label="PUT /api/sections/1/source (Bearer JWT + Payload)" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="11">
+  <line x1="392.94500000000005" y1="569.45" x2="760.903" y2="569.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="439.424" y="551.3000000000001" width="275" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="576.924" y="559.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">PUT /api/sections/1/source (Bearer JWT + Payload)</text>
+  <circle class="sequence-number" cx="392.94500000000005" cy="569.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="392.94500000000005" y="569.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">11</text>
+</g>
+<g class="message" data-from="BE" data-to="DB" data-label="更新 sections.source 并存入 sha256" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="12">
+  <line x1="760.903" y1="651.45" x2="984.1590000000001" y2="651.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="770.5310000000001" y="633.3000000000001" width="204" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="872.5310000000001" y="641.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">更新 sections.source 并存入 sha256</text>
+  <circle class="sequence-number" cx="760.903" cy="651.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="760.903" y="651.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">12</text>
+</g>
+<g class="message" data-from="BE" data-to="DB" data-label="写入 audit_logs 审计记录" data-line-style="solid" data-arrow-head="filled" data-self="false" data-step="13">
+  <line x1="760.903" y1="691.45" x2="984.1590000000001" y2="691.45" stroke="var(--_line)" stroke-width="1" marker-end="url(#seq-arrow)" />
+  <rect x="800.5310000000001" y="673.3000000000001" width="144" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="872.5310000000001" y="681.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">写入 audit_logs 审计记录</text>
+  <circle class="sequence-number" cx="760.903" cy="691.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="760.903" y="691.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">13</text>
+</g>
+<g class="message" data-from="BE" data-to="FE" data-label="返回成功 { ok: true, source_hash: &quot;...&quot; }" data-line-style="dashed" data-arrow-head="filled" data-self="false" data-step="14">
+  <line x1="760.903" y1="731.45" x2="392.94500000000005" y2="731.45" stroke="var(--_line)" stroke-width="1" stroke-dasharray="6 4" marker-end="url(#seq-arrow)" />
+  <rect x="473.924" y="713.3000000000001" width="206" height="16.3" rx="2" ry="2" fill="var(--bg)" />
+  <text x="576.924" y="721.45" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">返回成功 { ok: true, source_hash: &quot;...&quot; }</text>
+  <circle class="sequence-number" cx="760.903" cy="731.45" r="9" fill="var(--_arrow)" stroke="var(--bg)" stroke-width="1" />
+  <text x="760.903" y="731.45" class="sequence-number-label" font-size="10" text-anchor="middle" font-weight="600" fill="var(--bg)" dy="3.5">14</text>
+</g>
+<g class="note" data-position="over" data-actors="BE">
+  <polygon points="667.888,240.45 847.9180000000001,240.45 853.9180000000001,246.45 853.9180000000001,263.45 667.888,263.45" fill="var(--bg)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <polygon points="847.9180000000001,240.45 853.9180000000001,246.45 847.9180000000001,246.45" fill="var(--_inner-stroke)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="760.903" y="251.95" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">parseTypst() 解析 source 为 AST</text>
+</g>
+<g class="note" data-position="over" data-actors="FE">
+  <polygon points="271.71500000000003,375.45 508.17500000000007,375.45 514.1750000000001,381.45 514.1750000000001,398.45 271.71500000000003,398.45" fill="var(--bg)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <polygon points="508.17500000000007,375.45 514.1750000000001,381.45 508.17500000000007,381.45" fill="var(--_inner-stroke)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="392.94500000000005" y="386.95" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">匹配预设卡片 &gt; Typlet 渲染公式 &gt; 呈现页面</text>
+</g>
+<g class="note" data-position="over" data-actors="Reader,DB">
+  <polygon points="431.432,402.45 623.3420000000001,402.45 629.3420000000001,408.45 629.3420000000001,425.45 431.432,425.45" fill="var(--bg)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <polygon points="623.3420000000001,402.45 629.3420000000001,408.45 623.3420000000001,408.45" fill="var(--_inner-stroke)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="530.3870000000001" y="413.95" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">2. 编者工作台受限保存流 (写操作)</text>
+</g>
+<g class="note" data-position="over" data-actors="BE">
+  <polygon points="636.4060000000001,577.45 879.4000000000001,577.45 885.4000000000001,583.45 885.4000000000001,600.45 636.4060000000001,600.45" fill="var(--bg)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <polygon points="879.4000000000001,577.45 885.4000000000001,583.45 879.4000000000001,583.45" fill="var(--_inner-stroke)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="760.903" y="588.95" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">requireLogin 鉴权 + requireCourseEditor 校验</text>
+</g>
+<g class="note" data-position="over" data-actors="BE">
+  <polygon points="694.618,604.45 821.1880000000001,604.45 827.1880000000001,610.45 827.1880000000001,627.45 694.618,627.45" fill="var(--bg)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <polygon points="821.1880000000001,604.45 827.1880000000001,610.45 821.1880000000001,610.45" fill="var(--_inner-stroke)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="760.903" y="615.95" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">协同解析并提取数据</text>
+</g>
+<g class="actor" data-id="Reader" data-label="普通读者" data-type="actor">
+  <g transform="translate(58.614999999999995,32) scale(1.5)">
+    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" fill="none" stroke="var(--_line)" stroke-width="0.6666666666666666" />
+    <path d="M15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10Z" fill="none" stroke="var(--_line)" stroke-width="0.6666666666666666" />
+    <path d="M5.62842 18.3563C7.08963 17.0398 9.39997 16 12 16C14.6 16 16.9104 17.0398 18.3716 18.3563" fill="none" stroke="var(--_line)" stroke-width="0.6666666666666666" />
+  </g>
+  <text x="76.615" y="84" font-size="13" text-anchor="middle" font-weight="500" fill="var(--_text)" dy="4.55">普通读者</text>
+</g>
+<g class="actor" data-id="Editor" data-label="编者" data-type="actor">
+  <g transform="translate(198.615,32) scale(1.5)">
+    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" fill="none" stroke="var(--_line)" stroke-width="0.6666666666666666" />
+    <path d="M15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10Z" fill="none" stroke="var(--_line)" stroke-width="0.6666666666666666" />
+    <path d="M5.62842 18.3563C7.08963 17.0398 9.39997 16 12 16C14.6 16 16.9104 17.0398 18.3716 18.3563" fill="none" stroke="var(--_line)" stroke-width="0.6666666666666666" />
+  </g>
+  <text x="216.615" y="84" font-size="13" text-anchor="middle" font-weight="500" fill="var(--_text)" dy="4.55">编者</text>
+</g>
+<g class="actor" data-id="FE" data-label="前端 (maki-math-re)" data-type="participant">
+  <rect x="319.28350000000006" y="30" width="147.32299999999998" height="40" rx="4" ry="4" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="392.94500000000005" y="50" font-size="13" text-anchor="middle" font-weight="500" fill="var(--_text)" dy="4.55">前端 (maki-math-re)</text>
+</g>
+<g class="actor" data-id="SC" data-label="Secure Core" data-type="participant">
+  <rect x="517.7025000000001" y="30" width="110.273" height="40" rx="4" ry="4" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="572.839" y="50" font-size="13" text-anchor="middle" font-weight="500" fill="var(--_text)" dy="4.55">Secure Core</text>
+</g>
+<g class="actor" data-id="BE" data-label="后端 (maki-math-backend)" data-type="participant">
+  <rect x="667.9755" y="30" width="185.855" height="40" rx="4" ry="4" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="760.903" y="50" font-size="13" text-anchor="middle" font-weight="500" fill="var(--_text)" dy="4.55">后端 (maki-math-backend)</text>
+</g>
+<g class="actor" data-id="DB" data-label="PostgreSQL" data-type="participant">
+  <rect x="930.1340000000001" y="30" width="108.04999999999998" height="40" rx="4" ry="4" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="984.1590000000001" y="50" font-size="13" text-anchor="middle" font-weight="500" fill="var(--_text)" dy="4.55">PostgreSQL</text>
+</g>
+</svg>
