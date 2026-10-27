@@ -15,9 +15,14 @@ hero:
 
 features:
   - title: Structured DAG Graphs
-    details: Transform linear textbooks into multidimensional prerequisite networks across categories, courses, chapters, and sections.
+    details: Public knowledge points have independent prerequisite relations; lectures organize chapters, sections, and content blocks.
   - title: Modern Typst Typesetting
-    details: Move beyond legacy LaTeX friction with millisecond-grade vector math rendering powered by Typst and WASM.
+    details: Knowledge revisions and author blocks store Typst source; frontend rendering requires adaptation to the new contract.
   - title: Modern Full-Stack Design
-    details: Vue 3 frontend + Fastify 5 asynchronous backend + PostgreSQL topological queries and full-text search.
+    details: Vue frontend, Fastify backend, and PostgreSQL; the Chinese API reference now follows the knowledge and lecture model.
 ---
+
+
+::: warning API documentation update
+Legacy API and architecture descriptions have been withdrawn. The Chinese [integration contract](/api/frontend-integration) is the verified reference for backend main df87ca0; full English translation is pending.
+:::

@@ -1,34 +1,7 @@
-# Communication & Data Security
+# Communication and authorization
 
-To safeguard courseware data integrity and enforce access boundaries across network transit, MakiMath incorporates a lightweight communication security and access control mechanism.
+The previous English contract has been withdrawn: it described the removed course/section model. The verified backend baseline is main `df87ca0` (2026-10-27). This page does not claim that the frontend integration has shipped.
 
-## Core Design Considerations
+The Chinese contract is being updated first in this round. Use the [current reference](/architecture/security), [frontend integration sequence](/api/frontend-integration), and [evidence and open decisions](/api/verification). The full English translation is pending; the old interface descriptions are no longer authoritative.
 
-| Consideration | Platform Approach |
-|---|---|
-| **Data Protection in Transit** | Request and response payloads undergo automated encoding in transit, avoiding raw cleartext exposure and maintaining data integrity. |
-| **Session State Isolation** | Keys reside solely within runtime memory closures without persistent disk storage, renewing naturally upon page refresh. |
-| **Developer Transparency** | Framework interceptors and middlewares handle communication flows automatically, preserving standard JSON data interactions in business code. |
-| **Access Control (RBAC)** | Operates alongside JWT sessions and a three-tier role-based access model (Readers, Editors, Administrators) to govern API permissions. |
-
-## Data Flow Overview
-
-Application logic is decoupled from underlying communication handling. The general request and response lifecycle is structured as follows:
-
-![Communication & Data Flow](/images/arch-security-handshake-en.svg)
-
-### 1. Client-Side Interception
-- The frontend encapsulates outgoing network requests through an API abstraction layer that serializes and wraps payloads before transmission.
-- Views and components interact with standard asynchronous API calls without manual cryptographic boilerplate.
-
-### 2. Server-Side Middleware
-- Fastify server plugins intercept incoming requests at framework lifecycle hooks.
-- Payloads are decoded before reaching domain route handlers, while outgoing responses are wrapped uniformly on departure.
-
-## Access Control Model
-
-Complementing transport-level protections, platform operations are regulated by role-based access control (RBAC):
-
-- **Readers**: Direct access to all publicly published courses, outlines, and roadmaps without mandatory authentication.
-- **Editors**: Granted workspace access upon authorization to author, edit, and organize lecture sections and prerequisite linkages.
-- **Administrators**: Manage invitation codes, user roles, and platform settings.
+Knowledge points have stable identities and immutable submitted revisions. Lectures organize author blocks and references to specific approved knowledge revisions. Draft saves and submissions require edit_version. Lecture saves replace the complete tree and must preserve existing occurrence_id values. Review, publication and recommendation are separate concepts.

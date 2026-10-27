@@ -1,5 +1,10 @@
 # Quickstart Guide
 
+::: warning Pending model review
+This page retains legacy instructions and is not the current API contract. Course/section endpoints have been removed; executable scene code is not supported. Use the [current integration guide](/api/frontend-integration). Do not initialize an existing database from these legacy instructions.
+:::
+
+
 Welcome to the MakiMath documentation center! To help you find the right information quickly, select your primary role:
 
 ::: tip 🛠️ For Developers

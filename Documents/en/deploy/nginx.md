@@ -1,5 +1,10 @@
 # Nginx Reverse Proxy Configuration
 
+::: warning Pending model review
+This page retains legacy instructions and is not the current API contract. Course/section endpoints have been removed; executable scene code is not supported. Use the [current integration guide](/api/frontend-integration). Do not initialize an existing database from these legacy instructions.
+:::
+
+
 In production, Nginx serves as the unified reverse proxy gateway for MakiMath, managing SSL termination, high-performance static asset delivery, Gzip compression, and proxy routing for `/api` and `/health` requests to the Fastify backend.
 
 ## Production Nginx Configuration

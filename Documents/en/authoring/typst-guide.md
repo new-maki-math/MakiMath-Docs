@@ -1,5 +1,10 @@
 # Typst Math Typesetting Guide
 
+::: warning Pending model review
+This page retains legacy instructions and is not the current API contract. Course/section endpoints have been removed; executable scene code is not supported. Use the [current integration guide](/api/frontend-integration). Do not initialize an existing database from these legacy instructions.
+:::
+
+
 This guide is written specifically for **mathematics authors, teachers, and lecture creators**. MakiMath uses the modern **Typst** language so you can typeset beautiful, clean mathematical notes right in your browser without tedious local setups.
 
 ## Math Syntax: Refer to Official Typst Docs

@@ -46,7 +46,7 @@ export default defineConfig({
             {
               text: '讲义创作',
               items: [
-                { text: '讲义编排规范与 DAG', link: '/authoring/workflow' },
+                { text: '知识点贡献与讲义编排', link: '/authoring/workflow' },
                 { text: 'Typst 数学排版指南', link: '/authoring/typst-guide' },
                 { text: '编者工作台指南', link: '/authoring/workbench' }
               ]
@@ -57,7 +57,7 @@ export default defineConfig({
               text: '系统架构',
               items: [
                 { text: '系统架构总览', link: '/architecture/overview' },
-                { text: '前端架构 (Vue 3 + WASM)', link: '/architecture/frontend' },
+                { text: '前端接入边界', link: '/architecture/frontend' },
                 { text: '后端架构 (Fastify + PG)', link: '/architecture/backend' },
                 { text: '通信安全与数据保护', link: '/architecture/security' }
               ]
@@ -69,8 +69,11 @@ export default defineConfig({
               items: [
                 { text: '接口概览与约定', link: '/api/overview' },
                 { text: '认证与会话 API', link: '/api/auth' },
-                { text: '课程与目录树 API', link: '/api/courses' },
-                { text: '小节与讲义正文 API', link: '/api/sections' }
+                { text: '知识点 API', link: '/api/knowledge' },
+                { text: '讲义 API', link: '/api/lectures' },
+                { text: '审核与管理 API', link: '/api/review' },
+                { text: '前端接入流程', link: '/api/frontend-integration' },
+                { text: '核对记录与待确认事项', link: '/api/verification' }
               ]
             }
           ],

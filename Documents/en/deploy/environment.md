@@ -1,5 +1,10 @@
 # Environment Variables Reference
 
+::: warning Pending model review
+This page retains legacy instructions and is not the current API contract. Course/section endpoints have been removed; executable scene code is not supported. Use the [current integration guide](/api/frontend-integration). Do not initialize an existing database from these legacy instructions.
+:::
+
+
 MakiMath services are configured via `.env` files or system environment variables. Under Node.js 22+, native `--env-file` loading is fully supported.
 
 ## Backend Environment Variables (`maki-math-backend`)

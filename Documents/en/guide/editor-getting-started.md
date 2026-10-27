@@ -1,5 +1,10 @@
 # Editor Onboarding & Quickstart
 
+::: warning Pending model review
+This page retains legacy instructions and is not the current API contract. Course/section endpoints have been removed; executable scene code is not supported. Use the [current integration guide](/api/frontend-integration). Do not initialize an existing database from these legacy instructions.
+:::
+
+
 If you are a **mathematics teacher, teaching assistant, content creator, or textbook author**, this guide will help you get onboarded and start authoring your first structured mathematical course on MakiMath.
 
 ## The Role of an Editor

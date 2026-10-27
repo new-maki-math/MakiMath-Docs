@@ -1,5 +1,10 @@
 # Editor Workbench Guide
 
+::: warning Pending model review
+This page retains legacy instructions and is not the current API contract. Course/section endpoints have been removed; executable scene code is not supported. Use the [current integration guide](/api/frontend-integration). Do not initialize an existing database from these legacy instructions.
+:::
+
+
 The Lecture Workbench (`/workbench`) is the primary authoring workspace in MakiMath. It integrates tree navigation, source editing, knowledge graph linking, and live WASM previews into a single unified interface.
 
 ## Three Main Panels
