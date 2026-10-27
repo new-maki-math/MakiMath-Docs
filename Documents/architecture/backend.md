@@ -1,6 +1,6 @@
 # 后端架构
 
-依据main df87ca0，Node.js 22+、Fastify 5、PostgreSQL。服务分为app.js装配、routes参数与HTTP处理、services授权与事务、db连接池和数据库约束；server.js负责启动。细节与验证范围见[核对记录](../api/verification.md)。
+依据main df87ca0，Node.js 22+、Fastify 5、PostgreSQL。服务分为app.js装配、routes参数与HTTP处理、services授权与事务、db连接池和数据库约束；server.js负责启动。接口细节见[接口约定](../api/overview.md)。
 
 ## 模块
 

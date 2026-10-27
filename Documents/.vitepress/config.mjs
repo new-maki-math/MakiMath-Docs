@@ -72,8 +72,7 @@ export default defineConfig({
                 { text: '知识点 API', link: '/api/knowledge' },
                 { text: '讲义 API', link: '/api/lectures' },
                 { text: '审核与管理 API', link: '/api/review' },
-                { text: '前端接入流程', link: '/api/frontend-integration' },
-                { text: '核对记录与待确认事项', link: '/api/verification' }
+                { text: '前端接入流程', link: '/api/frontend-integration' }
               ]
             }
           ],

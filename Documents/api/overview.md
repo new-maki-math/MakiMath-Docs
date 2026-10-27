@@ -1,8 +1,8 @@
 # 接口约定
 
-本轮依据后端本地 `main` 提交 `df87ca08ce1daa692e8127a70a57f6955e458762`（2026-10-27），核对 `docs/api.md`、路由、服务、参数校验、认证插件和 `Database/schema.sql`。产品术语依据团队角色说明与本轮确认规则；未验收前端实现。
+本文说明知识点、讲义、审核与会话接口。后端基线见[前端接入流程](./frontend-integration.md)。
 
-先读[前端接入流程](./frontend-integration.md)。参考分为[认证](./auth.md)、[知识点](./knowledge.md)、[讲义](./lectures.md)、[审核与管理](./review.md)；[核对记录](./verification.md)说明验证范围和待确认事项。
+先读[前端接入流程](./frontend-integration.md)。参考分为[认证](./auth.md)、[知识点](./knowledge.md)、[讲义](./lectures.md)、[审核与管理](./review.md)。
 
 ## 通用结构
 
@@ -18,7 +18,7 @@
 
 浏览器生成 P-256 ECDH 临时密钥对，以 raw 格式公钥（65 字节）的 Base64 设置 `x-cp`。与服务端公钥协商得到的 256 位共享位串直接作为 AES-256-GCM 密钥。封装为 `{ "d": "Base64(12字节IV + 16字节Tag + 密文)" }`。现有通信适配层继续负责封装和解封。
 
-POST/PUT/PATCH 非空请求体必须加密，Content-Type 为 application/json。GET 也应携带 x-cp，因为 `/api` 下有内容的 2xx JSON 响应会加密。204 不解密；4xx/5xx 为普通 JSON，不解密。公钥接口和 `/health` 不封装。缺少 x-cp 时后端兼容配置中的固定密钥，供脚本和测试使用，不应在浏览器分发该密钥。此协议不能替代 HTTPS。自定义服务端私钥与公开公钥的对应问题见核对记录。
+POST/PUT/PATCH 非空请求体必须加密，Content-Type 为 application/json。GET 也应携带 x-cp，因为 `/api` 下有内容的 2xx JSON 响应会加密。204 不解密；4xx/5xx 为普通 JSON，不解密。公钥接口和 `/health` 不封装。缺少 x-cp 时后端兼容配置中的固定密钥，供脚本和测试使用，不应在浏览器分发该密钥。此协议不能替代 HTTPS。自定义服务端私钥时，须由后端确认其与固定公开公钥匹配。
 
 ## 错误与限制
 

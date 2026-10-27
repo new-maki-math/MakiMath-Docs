@@ -6,4 +6,4 @@ Database/schema.sql仅初始化空数据库，不包含旧模型迁移，也没�
 
 当前接口已经替换旧课程/小节模型。先读[前端接入流程](../api/frontend-integration.md)，再按[认证](../api/auth.md)、[知识点](../api/knowledge.md)、[讲义](../api/lectures.md)、[审核](../api/review.md)联调。草稿保存携带edit_version，讲义按完整树替换，引用固定已审核知识点版本。
 
-后端npm test默认不做真实数据库集成；需独立、已初始化且名称以_test结尾的数据库并显式启用MAKIMATH_INTEGRATION=1才执行集成测试。测试细节与本轮检查见[核对记录](../api/verification.md)。
+后端npm test默认不做真实数据库集成；需独立、已初始化且名称以_test结尾的数据库并显式启用MAKIMATH_INTEGRATION=1才执行集成测试。本轮未运行真实数据库集成流程。
