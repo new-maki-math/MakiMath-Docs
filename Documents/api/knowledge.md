@@ -1,22 +1,24 @@
 # 知识点 API
 
-知识点是可独立引用的公共知识实体；版本保存其某次确定的内容。路径省略 `/api`。字段未标可选的均必填。通用规则见[接口约定](./overview.md)。
+知识点是可独立引用的公共知识实体；版本保存其某次确定的内容。表中使用完整路径。字段未标可选的均必填。通用规则见[接口约定](./overview.md)。
 
-| 路径 | 方法 | 权限 | 请求 | 成功响应 |
-| --- | --- | --- | --- | --- |
-| `/knowledge-points` | GET | 公开 | 无 | 200，`[{ id, slug, status, revision_id, title, summary }]` |
-| `/knowledge-points/:id` | GET | 公开 | 无 | 200，当前公开详情 |
-| `/knowledge-points/:id/revisions/:revisionId` | GET | 公开 | 无 | 200，指定 approved 版本详情，无 categories |
-| `/knowledge-points` | POST | 登录 | slug, title, source | 201，`{ point, revision }` |
-| `/knowledge-revisions/mine` | GET | 登录 | 无 | 200，自己的版本摘要数组 |
-| `/knowledge-revisions/:id` | GET | 登录；非 approved 限贡献者/管理员 | 无 | 200，版本行 |
-| `/knowledge-points/:id/revisions` | POST | 登录；非 approved 来源限贡献者/管理员 | based_on_id | 201，新草稿版本行 |
-| `/knowledge-revisions/:id` | PUT | 贡献者/管理员 | 完整保存体 | 200，版本行 |
-| `/knowledge-revisions/:id/submit` | POST | 贡献者/管理员 | edit_version | 200，pending 版本行 |
-| `/knowledge-points/:id/prerequisites` | GET | 公开 | 无 | 200，`[{ id, slug, revision_id, title }]` |
-| `/knowledge-points/:id/prerequisites` | PUT | 管理员 | prerequisites：ID 数组 | 200，`{ knowledge_point_id, prerequisites }` |
-| `/knowledge-points/:id/categories` | PUT | 管理员 | categories：ID 数组 | 200，`{ knowledge_point_id, categories }` |
-| `/knowledge-points/:id/status` | PATCH | 管理员 | status：active / disabled / archived | 200，知识点身份行 |
+表内 `{id}`、`{revisionId}` 为必填路径参数，取值为正整数。Body 表示 JSON 请求体，Query 表示查询参数；未标“可选”的请求字段均必填。成功响应列说明 HTTP 状态和解密后的数据，完整字段见下文。
+
+| 路径 | 方法 | 接口说明 | 权限 | 请求参数 | 成功响应 |
+| --- | --- | --- | --- | --- | --- |
+| `/api/knowledge-points` | `GET` | 列出公开知识点 | 无需认证 | 无请求体 | `200`：`[{ id, slug, status, revision_id, title, summary }]` |
+| `/api/knowledge-points/{id}` | `GET` | 读取当前公开知识点版本 | 无需认证 | 无请求体 | `200`：当前公开详情 |
+| `/api/knowledge-points/{id}/revisions/{revisionId}` | `GET` | 读取指定已审核版本 | 无需认证 | 无请求体 | `200`：指定 approved 版本详情，无 categories |
+| `/api/knowledge-points` | `POST` | 创建知识点和首个草稿 | 已登录用户 | Body：`slug`, `title`, `source` | `201`：`{ point, revision }` |
+| `/api/knowledge-revisions/mine` | `GET` | 列出自己的知识点版本 | 已登录用户 | 无请求体 | `200`：自己的版本摘要数组 |
+| `/api/knowledge-revisions/{id}` | `GET` | 读取知识点版本 | 登录；非 approved 限版本贡献者或管理员 | 无请求体 | `200`：版本行 |
+| `/api/knowledge-points/{id}/revisions` | `POST` | 复制已提交版本为草稿 | 登录；非 approved 来源限版本贡献者或管理员 | Body：`based_on_id` | `201`：新草稿版本行 |
+| `/api/knowledge-revisions/{id}` | `PUT` | 完整保存知识点草稿 | 版本贡献者或管理员 | Body：完整保存体，见下文（全部顶层字段必填） | `200`：版本行 |
+| `/api/knowledge-revisions/{id}/submit` | `POST` | 提交知识点版本审核 | 版本贡献者或管理员 | Body：`edit_version` | `200`：pending 版本行 |
+| `/api/knowledge-points/{id}/prerequisites` | `GET` | 读取公开前置知识点 | 无需认证 | 无请求体 | `200`：`[{ id, slug, revision_id, title }]` |
+| `/api/knowledge-points/{id}/prerequisites` | `PUT` | 替换前置知识点关系 | 管理员 | Body：`prerequisites`：ID 数组 | `200`：`{ knowledge_point_id, prerequisites }` |
+| `/api/knowledge-points/{id}/categories` | `PUT` | 替换知识点分类关联 | 管理员 | Body：`categories`：ID 数组 | `200`：`{ knowledge_point_id, categories }` |
+| `/api/knowledge-points/{id}/status` | `PATCH` | 更新知识点状态 | 管理员 | Body：`status`：active / disabled / archived | `200`：知识点身份行 |
 
 公开接口要求知识点 active，所读版本 approved。当前详情字段为 `id, slug, revision_id, revision_no, title, summary, source, animation, metadata, categories`，categories 为 `[{ id, slug, name }]`。指定版本可以不是当前公开版，但须属于该知识点并审核通过。
 
@@ -49,3 +51,17 @@ mine 返回 `id, knowledge_point_id, revision_no, title, status, edit_version, s
 前置关系与分类关联为整组替换，数组最长 100，不可重复；空数组清空。数据库检查知识点前置及分类父子关系成环。公开前置列表过滤不可公开的前置点。
 
 主要错误：参数/重复数组 400；权限 403；不存在或不可公开 404；重复 slug、旧并发号、非草稿操作、复制草稿、外键/成环等冲突 409（自引用检查约束可能为 400）。
+
+## 草稿保存参数定义
+
+适用于 `PUT /api/knowledge-revisions/{id}`；以下字段均位于 Body。提交接口只接受 `edit_version`，不能携带其余字段。
+
+| 参数 | 类型 | 必填 | 说明与约束 |
+| --- | --- | --- | --- |
+| `edit_version` | integer | 是 | 最近读取的并发号，至少 1 |
+| `title` | string | 是 | 非空，最长 200 字符 |
+| `summary` | string | 是 | 可为空，最长 5000 字符 |
+| `source` | string | 是 | 草稿可为空，最长 200000 字符 |
+| `animation` | object / null | 是 | 不允许可执行场景字段 |
+| `metadata` | object | 是 | 不能是数组或 null |
+| `change_note` | string | 是 | 可为空，最长 2000 字符 |

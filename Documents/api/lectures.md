@@ -1,22 +1,24 @@
 # 讲义 API
 
-讲义有独立身份、版本和所有者；版本按“章节 → 小节 → 内容块”组织作者内容与公共知识点引用。路径省略 `/api`。通用规则见[接口约定](./overview.md)。
+讲义有独立身份、版本和所有者；版本按“章节 → 小节 → 内容块”组织作者内容与公共知识点引用。表中使用完整路径。通用规则见[接口约定](./overview.md)。
 
-| 路径 | 方法 | 权限 | 请求 | 成功响应 |
-| --- | --- | --- | --- | --- |
-| `/lectures` | GET | 公开 | 无 | 200，`[{ id, slug, is_recommended, revision_id, title, subtitle, descr, category_id }]` |
-| `/lectures/:id` | GET | 公开 | 无 | 200，`{ lecture, revision, chapters }` |
-| `/lectures/mine` | GET | 登录 | 无 | 200，有权访问的身份行数组；管理员返回全部 |
-| `/lectures` | POST | 登录 | 必填 slug, title | 201，`{ lecture, revision }` |
-| `/lectures/:id/revisions` | GET | 查看权限 | 无 | 200，版本行数组，revision_no 倒序 |
-| `/lectures/:id/revisions` | POST | 编辑权限 | 必填 based_on_id | 201，`{ revision, chapters }` |
-| `/lecture-revisions/:id` | GET | 查看权限 | 无 | 200，`{ revision, chapters }` |
-| `/lecture-revisions/:id` | PUT | 编辑权限 | 完整保存体 | 200，`{ revision, chapters }` |
-| `/lecture-revisions/:id/submit` | POST | 编辑权限 | 必填 edit_version | 200，pending 版本行，不含 chapters |
-| `/lectures/:id/collaborators` | GET | 查看权限 | 无 | 200，`[{ user_id, permission, created_at, username, display_name }]` |
-| `/lectures/:id/collaborators/:userId` | PUT | 所有者/管理员 | 必填 permission：view / edit | 200，`{ lecture_id, user_id, permission, invited_by, created_at }` |
-| `/lectures/:id/collaborators/:userId` | DELETE | 所有者/管理员 | 无 | 204 |
-| `/lectures/:id/publication` | PATCH | 所有者/管理员；推荐仅管理员 | 可选 publication_status, is_recommended | 200，讲义身份行 |
+表内 `{id}`、`{userId}` 为必填路径参数，取值为正整数。Body 表示 JSON 请求体，Query 表示查询参数；未标“可选”的请求字段均必填。成功响应列说明 HTTP 状态和解密后的数据，完整字段见下文。
+
+| 路径 | 方法 | 接口说明 | 权限 | 请求参数 | 成功响应 |
+| --- | --- | --- | --- | --- | --- |
+| `/api/lectures` | `GET` | 列出公开讲义 | 无需认证 | 无请求体 | `200`：`[{ id, slug, is_recommended, revision_id, title, subtitle, descr, category_id }]` |
+| `/api/lectures/{id}` | `GET` | 读取当前公开讲义快照 | 无需认证 | 无请求体 | `200`：`{ lecture, revision, chapters }` |
+| `/api/lectures/mine` | `GET` | 列出有权访问的讲义 | 已登录用户 | 无请求体 | `200`：有权访问的身份行数组；管理员返回全部 |
+| `/api/lectures` | `POST` | 创建讲义和首个草稿 | 已登录用户 | Body：`slug`, `title` | `201`：`{ lecture, revision }` |
+| `/api/lectures/{id}/revisions` | `GET` | 列出讲义版本 | 查看权限 | 无请求体 | `200`：版本行数组，revision_no 倒序 |
+| `/api/lectures/{id}/revisions` | `POST` | 复制已提交讲义为草稿 | 编辑权限 | Body：`based_on_id` | `201`：`{ revision, chapters }` |
+| `/api/lecture-revisions/{id}` | `GET` | 读取完整讲义版本 | 查看权限 | 无请求体 | `200`：`{ revision, chapters }` |
+| `/api/lecture-revisions/{id}` | `PUT` | 替换完整讲义草稿 | 编辑权限 | Body：完整保存体，见下文（全部顶层字段必填） | `200`：`{ revision, chapters }` |
+| `/api/lecture-revisions/{id}/submit` | `POST` | 提交完整讲义版本审核 | 编辑权限 | Body：`edit_version` | `200`：pending 版本行，不含 chapters |
+| `/api/lectures/{id}/collaborators` | `GET` | 列出讲义协作者 | 查看权限 | 无请求体 | `200`：`[{ user_id, permission, created_at, username, display_name }]` |
+| `/api/lectures/{id}/collaborators/{userId}` | `PUT` | 设置协作者权限 | 讲义所有者或管理员 | Body：`permission`：view / edit | `200`：`{ lecture_id, user_id, permission, invited_by, created_at }` |
+| `/api/lectures/{id}/collaborators/{userId}` | `DELETE` | 移除讲义协作者 | 讲义所有者或管理员 | 无请求体 | `204`：无响应体 |
+| `/api/lectures/{id}/publication` | `PATCH` | 更新上下架或推荐状态 | 讲义所有者或管理员；推荐仅管理员 | Body：可选 `publication_status`, `is_recommended` | `200`：讲义身份行 |
 
 查看权限包括所有者、管理员、view/edit 协作者；编辑权限包括所有者、管理员和 edit 协作者。普通登录用户不因讲义公开而获得私有版本查看权限。删除不存在的协作者也为 204；给所有者重复授权为 409；目标用户必须 active，否则 404。
 
@@ -70,3 +72,19 @@
 publication_status 可写 published / withdrawn / archived，不能设回创建初态 unpublished。published 需已有审核公开版本，不能指定 public_revision_id。下架/归档清除推荐。审核通过发布对应完整版本；推荐初始 false，但新版审核不会自动重置已有 true。
 
 主要错误：结构/类型/动画字段 400；权限 403；不存在/不可公开 404；旧并发号、非草稿操作、空树提交、复制草稿、无效引用、实例/slug 重复、无已审核版本上架为 409。
+
+## 草稿保存参数定义
+
+适用于 `PUT /api/lecture-revisions/{id}`；以下字段均位于 Body。目录和内容块的子字段见完整保存体与读取后再保存说明。
+
+| 参数 | 类型 | 必填 | 说明与约束 |
+| --- | --- | --- | --- |
+| `edit_version` | integer | 是 | 最近读取的并发号，至少 1 |
+| `title` | string | 是 | 非空，最长 200 字符 |
+| `subtitle` | string | 是 | 可为空，最长 500 字符 |
+| `descr` | string | 是 | 可为空，最长 5000 字符 |
+| `category_id` | integer / null | 是 | 讲义分类 ID；无分类传 null |
+| `typst_version` | string | 是 | 非空，最长 50 字符 |
+| `metadata` | object | 是 | 不能是数组或 null |
+| `change_note` | string | 是 | 可为空，最长 2000 字符 |
+| `chapters` | array of object | 是 | 完整目录树，最多 100 章；空数组表示清空目录 |

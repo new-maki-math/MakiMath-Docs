@@ -2,16 +2,18 @@
 
 依据及加密方式见[接口约定](./overview.md)。字段未标可选的均必填，拒绝未知字段。
 
-| 路径 | 方法 | 权限 | 请求体 | 成功响应 |
-| --- | --- | --- | --- | --- |
-| `/auth/pubkey` | GET | 公开 | 无 | 200，明文 `{ ok, pubkey }` |
-| `/auth/register` | POST | 公开，需有效邀请码 | username, password, invite_code；可选 display_name | 201，`{ user }`，不创建会话 |
-| `/auth/login` | POST | 公开 | username, password | 200，`{ user, access_token, refresh_token }` |
-| `/auth/refresh` | POST | 有效刷新令牌 | refresh_token | 200，`{ user, access_token, refresh_token }` |
-| `/auth/me` | GET | 登录 | 无 | 200，`{ user }` |
-| `/auth/profile` | PATCH | 登录 | display_name | 200，`{ user }` |
-| `/auth/logout` | POST | 登录 | refresh_token | 204，无正文 |
-| `/auth/password` | PATCH | 登录 | old_password, new_password | 204，撤销全部会话，无正文 |
+Body 表示 JSON 请求体，Query 表示查询参数；未标“可选”的请求字段均必填。成功响应列说明 HTTP 状态和解密后的数据，完整字段见下文。
+
+| 路径 | 方法 | 接口说明 | 权限 | 请求参数 | 成功响应 |
+| --- | --- | --- | --- | --- | --- |
+| `/api/auth/pubkey` | `GET` | 获取通信公钥 | 无需认证 | 无请求体 | `200`：明文 `{ ok, pubkey }` |
+| `/api/auth/register` | `POST` | 注册账号 | 公开，需有效邀请码 | Body：`username`, `password`, `invite_code`；可选 `display_name` | `201`：`{ user }`，不创建会话 |
+| `/api/auth/login` | `POST` | 登录并创建会话 | 无需认证 | Body：`username`, `password` | `200`：`{ user, access_token, refresh_token }` |
+| `/api/auth/refresh` | `POST` | 刷新访问令牌并轮换刷新令牌 | 有效刷新令牌 | Body：`refresh_token` | `200`：`{ user, access_token, refresh_token }` |
+| `/api/auth/me` | `GET` | 获取当前用户 | 已登录用户 | 无请求体 | `200`：`{ user }` |
+| `/api/auth/profile` | `PATCH` | 更新个人资料 | 已登录用户 | Body：`display_name` | `200`：`{ user }` |
+| `/api/auth/logout` | `POST` | 注销匹配的会话 | 已登录用户 | Body：`refresh_token` | `204`：无响应体 |
+| `/api/auth/password` | `PATCH` | 修改密码并撤销全部会话 | 已登录用户 | Body：`old_password`, `new_password` | `204`：无响应体；撤销全部会话 |
 
 注册后必须单独登录。username 最长 80；invite_code 最长 100；display_name 最长 100，可空。注册密码和新密码至少 8 字符、至多 200 字符且 UTF-8 不超过 72 字节。登录密码/旧密码非空、最长 200。refresh_token 非空、最长 200。
 
@@ -52,3 +54,17 @@ PATCH /auth/password：
 ```
 
 主要错误：字段/无效邀请码 400；重复用户名 409；登录失败、无效刷新会话、旧密码错误 401。注销和改密成功不返回 `{ ok: true }`，不能解析空 JSON。
+
+## 请求参数定义
+
+下表补充接口索引中的请求体字段。同名字段只用于索引列出的接口。
+
+| 参数 | 位置 | 类型 | 必填 | 约束 |
+| --- | --- | --- | --- | --- |
+| `username` | Body | string | 是 | 非空，最长 80 字符 |
+| `password` | Body | string | 是 | 注册至少 8 字符且不超过 72 UTF-8 字节；登录最长 200 字符 |
+| `invite_code` | Body | string | 是 | 注册使用，非空，最长 100 字符 |
+| `display_name` | Body | string | 注册否；更新资料是 | 可为空，最长 100 字符 |
+| `refresh_token` | Body | string | 是 | 刷新和注销使用，非空，最长 200 字符 |
+| `old_password` | Body | string | 是 | 修改密码使用，非空，最长 200 字符 |
+| `new_password` | Body | string | 是 | 至少 8 字符，最长 200 字符且不超过 72 UTF-8 字节 |
