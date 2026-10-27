@@ -2,21 +2,21 @@
 
 知识点是可独立引用的公共知识实体；版本保存其某次确定的内容。路径省略 `/api`。字段未标可选的均必填。通用规则见[接口约定](./overview.md)。
 
-| 方法 | 路径 | 权限 | 请求 | 成功响应 |
+| 路径 | 方法 | 权限 | 请求 | 成功响应 |
 | --- | --- | --- | --- | --- |
-| GET | `/knowledge-points` | 公开 | 无 | 200，`[{ id, slug, status, revision_id, title, summary }]` |
-| GET | `/knowledge-points/:id` | 公开 | 无 | 200，当前公开详情 |
-| GET | `/knowledge-points/:id/revisions/:revisionId` | 公开 | 无 | 200，指定 approved 版本详情，无 categories |
-| POST | `/knowledge-points` | 登录 | slug, title, source | 201，`{ point, revision }` |
-| GET | `/knowledge-revisions/mine` | 登录 | 无 | 200，自己的版本摘要数组 |
-| GET | `/knowledge-revisions/:id` | 登录；非 approved 限贡献者/管理员 | 无 | 200，版本行 |
-| POST | `/knowledge-points/:id/revisions` | 登录；非 approved 来源限贡献者/管理员 | based_on_id | 201，新草稿版本行 |
-| PUT | `/knowledge-revisions/:id` | 贡献者/管理员 | 完整保存体 | 200，版本行 |
-| POST | `/knowledge-revisions/:id/submit` | 贡献者/管理员 | edit_version | 200，pending 版本行 |
-| GET | `/knowledge-points/:id/prerequisites` | 公开 | 无 | 200，`[{ id, slug, revision_id, title }]` |
-| PUT | `/knowledge-points/:id/prerequisites` | 管理员 | prerequisites：ID 数组 | 200，`{ knowledge_point_id, prerequisites }` |
-| PUT | `/knowledge-points/:id/categories` | 管理员 | categories：ID 数组 | 200，`{ knowledge_point_id, categories }` |
-| PATCH | `/knowledge-points/:id/status` | 管理员 | status：active / disabled / archived | 200，知识点身份行 |
+| `/knowledge-points` | GET | 公开 | 无 | 200，`[{ id, slug, status, revision_id, title, summary }]` |
+| `/knowledge-points/:id` | GET | 公开 | 无 | 200，当前公开详情 |
+| `/knowledge-points/:id/revisions/:revisionId` | GET | 公开 | 无 | 200，指定 approved 版本详情，无 categories |
+| `/knowledge-points` | POST | 登录 | slug, title, source | 201，`{ point, revision }` |
+| `/knowledge-revisions/mine` | GET | 登录 | 无 | 200，自己的版本摘要数组 |
+| `/knowledge-revisions/:id` | GET | 登录；非 approved 限贡献者/管理员 | 无 | 200，版本行 |
+| `/knowledge-points/:id/revisions` | POST | 登录；非 approved 来源限贡献者/管理员 | based_on_id | 201，新草稿版本行 |
+| `/knowledge-revisions/:id` | PUT | 贡献者/管理员 | 完整保存体 | 200，版本行 |
+| `/knowledge-revisions/:id/submit` | POST | 贡献者/管理员 | edit_version | 200，pending 版本行 |
+| `/knowledge-points/:id/prerequisites` | GET | 公开 | 无 | 200，`[{ id, slug, revision_id, title }]` |
+| `/knowledge-points/:id/prerequisites` | PUT | 管理员 | prerequisites：ID 数组 | 200，`{ knowledge_point_id, prerequisites }` |
+| `/knowledge-points/:id/categories` | PUT | 管理员 | categories：ID 数组 | 200，`{ knowledge_point_id, categories }` |
+| `/knowledge-points/:id/status` | PATCH | 管理员 | status：active / disabled / archived | 200，知识点身份行 |
 
 公开接口要求知识点 active，所读版本 approved。当前详情字段为 `id, slug, revision_id, revision_no, title, summary, source, animation, metadata, categories`，categories 为 `[{ id, slug, name }]`。指定版本可以不是当前公开版，但须属于该知识点并审核通过。
 

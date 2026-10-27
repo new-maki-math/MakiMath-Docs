@@ -2,16 +2,16 @@
 
 依据及加密方式见[接口约定](./overview.md)。字段未标可选的均必填，拒绝未知字段。
 
-| 方法 | 路径 | 权限 | 请求体 | 成功响应 |
+| 路径 | 方法 | 权限 | 请求体 | 成功响应 |
 | --- | --- | --- | --- | --- |
-| GET | `/auth/pubkey` | 公开 | 无 | 200，明文 `{ ok, pubkey }` |
-| POST | `/auth/register` | 公开，需有效邀请码 | username, password, invite_code；可选 display_name | 201，`{ user }`，不创建会话 |
-| POST | `/auth/login` | 公开 | username, password | 200，`{ user, access_token, refresh_token }` |
-| POST | `/auth/refresh` | 有效刷新令牌 | refresh_token | 200，`{ user, access_token, refresh_token }` |
-| GET | `/auth/me` | 登录 | 无 | 200，`{ user }` |
-| PATCH | `/auth/profile` | 登录 | display_name | 200，`{ user }` |
-| POST | `/auth/logout` | 登录 | refresh_token | 204，无正文 |
-| PATCH | `/auth/password` | 登录 | old_password, new_password | 204，撤销全部会话，无正文 |
+| `/auth/pubkey` | GET | 公开 | 无 | 200，明文 `{ ok, pubkey }` |
+| `/auth/register` | POST | 公开，需有效邀请码 | username, password, invite_code；可选 display_name | 201，`{ user }`，不创建会话 |
+| `/auth/login` | POST | 公开 | username, password | 200，`{ user, access_token, refresh_token }` |
+| `/auth/refresh` | POST | 有效刷新令牌 | refresh_token | 200，`{ user, access_token, refresh_token }` |
+| `/auth/me` | GET | 登录 | 无 | 200，`{ user }` |
+| `/auth/profile` | PATCH | 登录 | display_name | 200，`{ user }` |
+| `/auth/logout` | POST | 登录 | refresh_token | 204，无正文 |
+| `/auth/password` | PATCH | 登录 | old_password, new_password | 204，撤销全部会话，无正文 |
 
 注册后必须单独登录。username 最长 80；invite_code 最长 100；display_name 最长 100，可空。注册密码和新密码至少 8 字符、至多 200 字符且 UTF-8 不超过 72 字节。登录密码/旧密码非空、最长 200。refresh_token 非空、最长 200。
 
