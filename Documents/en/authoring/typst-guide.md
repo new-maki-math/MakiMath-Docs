@@ -1,65 +1,56 @@
-# Typst Math Typesetting Guide
+# Typst syntax and MM macros
 
-::: warning Pending model review
-This page retains legacy instructions and is not the current API contract. Course/section endpoints have been removed; executable scene code is not supported. Use the [current integration guide](/api/frontend-integration). Do not initialize an existing database from these legacy instructions.
-:::
+The browser uses Typlet to parse Typst syntax and maps supported document nodes to web components. Typlet renders math. This is **not a complete Typst compiler**. The backend stores and returns source text without parsing macros or building a document AST. Examples were checked against source code; no rendering tests were run in this documentation round.
 
+Consult the official [math](https://typst.app/docs/reference/math/), [text](https://typst.app/docs/reference/text/text/) and [table](https://typst.app/docs/reference/model/table/) references for language syntax. Their full feature sets are not the site's support promise.
 
-This guide is written specifically for **mathematics authors, teachers, and lecture creators**. MakiMath uses the modern **Typst** language so you can typeset beautiful, clean mathematical notes right in your browser without tedious local setups.
+## Supported subset
 
-## Math Syntax: Refer to Official Typst Docs
+| Area | Current scope |
+| --- | --- |
+| Markup | Text, paragraphs, headings, line breaks, comments, escapes, emphasis, unordered/ordered/term lists |
+| Math | Inline `$x^2$` and display `$ x^2 $`; actual support depends on Typlet, with source and diagnostics on failure |
+| Text | Static supported `text` arguments and `set text`; strong, emph, underline, strike, overline, sub, super, smallcaps, hide; raw string with optional block boolean |
+| Links and highlight | Static http/https/mailto links and optional body; highlight with optional static fill |
+| Layout | Static h/v spacing, parameterless linebreak/parbreak, left/center/right align; box with inset/radius/stroke/fill, block without extra layout parameters |
+| Tables | Static columns, initial single header, cells with spans/positions/styles, explicit hline/vline positions |
 
-Typst formula syntax is clean and intuitive: inline math is wrapped with single `$` signs (e.g., `$f(x)$`), and standalone display math uses `$` with surrounding spaces.
+Supported static text properties include size, color, font names/arrays, weight/style, tracking/stretch, lang/region, direction, kerning, hyphenation, ligatures, numeric styles, features and variations. Region requires lang. Font availability and OpenType behavior depend on browser/fonts. Variables, computed values and conditional rules are not supported substitutes.
 
-For all specific math formulas, symbols, fractions, sub/superscripts, roots, limits, integrals, matrices, and piecewise cases, please refer directly to the official documentation:
+Tables accept 1–1000 static columns or supported static length/auto/fr widths, with up to 20000 occupied grid slots. Lines cannot cut through merged cells, and automatic hline/vline positions are not supported. Unsupported syntax remains visible with line/column diagnostics. Arbitrary let, functions, loops, conditions, import/include/packages, show rules, page settings and file operations are outside this renderer's supported execution model. Legacy course adapters and defbox/thmbox/zt/makitag are no longer used.
 
-👉 **[Official Typst Math Reference Manual](https://typst.app/docs/reference/math/)**
+## The 13 MM macros
 
-The official documentation contains interactive examples and complete spellings for every mathematical symbol and function.
+These are site extensions. Content blocks `[text]` and strings `"text"` are not interchangeable.
 
-## Step 1: Write Content Directly
+| Macro | Call | Parameters |
+| --- | --- | --- |
+| mm-box-definition | `#mm-box-definition[body]` | Definition, blue |
+| mm-box-theorem | `#mm-box-theorem[body]` | Theorem/formula, purple |
+| mm-box-example | `#mm-box-example[body]` | Example, cyan |
+| mm-box-warn | `#mm-box-warn[body]` | Warning, amber |
+| mm-box-conclusion | `#mm-box-conclusion[body]` | Conclusion/corollary, green |
+| mm-box-frequency | `#mm-box-frequency[body]` | Exam frequency, orange |
+| mm-box-homework | `#mm-box-homework[body]` | Homework, teal |
+| mm-tag | `#mm-tag(color: "blue")[tag]` | One inline body; optional color defaults to blue |
+| mm-question | `#mm-question(source: "exam", title: [title], difficulty: 3, id: "q-1")[body]` | All named arguments and the single body are optional; difficulty is integer 1–5; source/id strings; title inline content |
+| mm-question-options | `#mm-question-options(columns: 2, [first], [second])` | At least one content block; optional columns 1, 2 or 4; automatic A/B labels |
+| mm-question-blank | `#mm-question-blank(width: 4em)` | No body; optional supported static nonnegative length, default 4em |
+| mm-knowledge | `#mm-knowledge(slug: "sequence-limit")` | Exactly one static slug string; current active knowledge |
+| mm-test | `#mm-test` | Bare identifier, no parentheses or parameters; renders MM TEST |
 
-If you have used Typst on your computer before, you might be used to adding boilerplate code for margins, paper size, and fonts at the top of every file.
-
-**In MakiMath, please do not include any of that!**
+All seven box macros require exactly one body and only allow the optional `title: [inline content]` argument. A string title or arbitrary color parameter is not accepted. Tag presets are blue/cyan/green/orange/rose/purple, or a supported static rgb/color.rgb value. Unsupported tag color falls back to blue with a diagnostic. Block content is not accepted inside tags or supplementary titles.
 
 ```typst
-// ❌ Do NOT write setup code like this:
-#set page(...)
-#set text(...)
-#import "@preview/..."
+#mm-box-definition(title: [Sequence limit])[
+  Let the sequence be $a_n$.
+]
+#mm-tag(color: rgb("B22234"))[Important]
+#mm-question(source: "Practice", title: [Choose], difficulty: 2, id: "limit-01")[
+  Select a conclusion.
+  #mm-question-options(columns: 2, [$a_n$ converges], [$a_n$ diverges])
+  Explanation: #mm-question-blank(width: 6em)
+]
 ```
 
-**Why is it unnecessary?**
-- The platform already comes with built-in fonts for Latin text, CJK characters, and math symbols.
-- Lecture notes automatically adapt to phones, tablets, and desktop screens, as well as light and dark themes.
-- **In the editor, simply start typing your headings, text, and formulas directly from line one.**
-
-## How Should I Define Styles?
-
-First, keep a core rule in mind:
-
-**Every Typst lecture automatically pairs with an "Adapter" (which decides which macro connects to which card structure) and a "Stylesheet" (which defines how that card visually looks on the screen).**
-
-Because of this, you never need to write boilerplate styling code inside your lecture notes. If you want to introduce new custom cards (like theorems, definitions, examples, or exercise blocks) or customize the visual theme for a course, **you do not need any programming knowledge—simply prepare the following three files and contact the development team:**
-
-1. **Prepare Three Simple Files**:
-   - **File 1: Lecture Sample (`.typ`)**: A real lecture snippet showing your text and how you use the cards in context.
-   - **File 2: Style Reference (`.typ` or screenshot)**: A visual mockup or sample showing your desired appearance (borders, background colors, corners, or layout screenshots).
-   - **File 3: Macro Directory (`.typ`)**: A dedicated list of **all macro commands** you plan to use, detailing each macro's name, arguments, and purpose.
-2. **Submit to Developers**:
-   - Package these three files and send them to the platform technical team, or open an Issue on the GitHub repository.
-3. **The Tech Team Handles the Adaptation**:
-   - Developers will configure the underlying responsive styling, breakpoints, and dark mode support based on your macro directory and style reference.
-   - Once configured, you can call those card names directly in the workbench and see them render in real time!
-
-::: tip 🌟 Good News: Universal Adapter in Progress
-The platform development team is actively working on a **Universal Preset Adapter** and a standard mathematical stylesheet!
-
-In upcoming releases, standard academic callouts (theorems, definitions, lemmas, examples, proofs, corollaries) will be supported out of the box without requiring manual developer adaptation for each course. Stay tuned!
-:::
-
-## Good Formatting Habits
-
-- **Spacing**: Leaving a space between formulas and text makes notes significantly easier to read (e.g., `Let $f(x)$ be differentiable at $x_0$`).
-- **Punctuation**: Use standard punctuation in text, and standard western punctuation inside formulas.
+Option columns collapse on narrow containers. These macros do not provide answer submission, grading or question-bank records. See [knowledge references](./knowledge-reference.md) for source conventions and local mastery.

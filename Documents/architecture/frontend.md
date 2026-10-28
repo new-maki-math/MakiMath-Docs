@@ -1,11 +1,11 @@
-# 前端接入边界
+# 前端渲染与编辑
 
-本轮以新后端main df87ca0契约为依据，未检查或验收前端当前实现。以下是接入要求，不表示页面功能已经完成。原页面关于整篇源码WASM编译、旧课程接口和实时预览的描述不再作为当前接口依据。
+当前前端以64cc122为基线。Renderer/TypstDoc.vue通过Typlet解析源码，typst/parse-document.js将支持的语法映射为Vue节点，公式单独调用Typlet渲染。MM扩展与正文解析分开维护。后端不返回旧doc AST，不再使用课程preset适配器。本站不是完整Typst编译环境，能力及参数边界见[Typst与MM宏](../authoring/typst-guide.md)。
 
-请求层需处理access_token与refresh_token、me的user包裹、204空响应、加密2xx与明文错误。注册后单独登录，刷新轮换令牌，注销/改密清理本地会话状态。
+知识点由管理员直接维护；讲义小节保存完整source。前端识别mm-knowledge的slug，从知识点公开接口读取当前active正文，挂载首框标题与本地掌握按钮。请求404与普通失败分别处理，知识点内嵌套引用不展开。详见[知识点引用](../authoring/knowledge-reference.md)。
 
-编辑层区分知识点贡献和讲义编辑。讲义读取返回revision及chapters树，保存构造白名单DTO，保留每级occurrence_id并携带edit_version。引用块只保存固定版本ID，不回写公共正文；作者块编辑自己的source。读取树的数据库行ID和knowledge_*联查字段不能回传。
+TypstEditorPreview组合Monaco编辑、知识点搜索插入、预览和可选双向同步滚动。同步滚动默认关闭，通过源码区间和渲染锚点近似定位，不保证逐行像素一致。错误片段显示原文，诊断有行列号。
 
-阅读层按block_type选择source或knowledge_source，不再依赖旧sections/:id/doc的AST响应；动画不得继续执行scenes_code。渲染器适配方式与允许的动画数据结构仍需前端和后端另行验证。
+在线讲义的保存使用edit_version和章/节occurrence_id；源码内引用不再有后端实例标识。审核快照与工作草稿分开；审核通过会改变草稿并发号，前端恢复可见时检查更新，遇到本地脏内容先保留输入并提示冲突。不能把服务器新数据直接覆盖未保存编辑。
 
-本地掌握记录以知识点永久ID为键，引用实例位置用occurrence_id。新版知识点不会自动替换讲义固定引用。完整步骤见[前端接入流程](../api/frontend-integration.md)，字段见[讲义 API](../api/lectures.md)。
+本地讲义、掌握状态、更新日志已读状态分别在浏览器IndexedDB保存，不按登录账号隔离，也无跨设备同步。更多操作见[工作台](../authoring/workbench.md)。本轮仅静态审阅，未运行渲染或联调测试。

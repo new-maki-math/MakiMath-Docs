@@ -47,7 +47,8 @@ export default defineConfig({
               text: '讲义创作',
               items: [
                 { text: '知识点贡献与讲义编排', link: '/authoring/workflow' },
-                { text: 'Typst 数学排版指南', link: '/authoring/typst-guide' },
+                { text: 'Typst 语法与 MM 宏', link: '/authoring/typst-guide' },
+                { text: '知识点引用与掌握', link: '/authoring/knowledge-reference' },
                 { text: '编者工作台指南', link: '/authoring/workbench' }
               ]
             }
@@ -148,6 +149,7 @@ export default defineConfig({
               items: [
                 { text: 'Lecture Structure & DAG', link: '/en/authoring/workflow' },
                 { text: 'Typst Math Guide', link: '/en/authoring/typst-guide' },
+                { text: 'Knowledge References & Mastery', link: '/en/authoring/knowledge-reference' },
                 { text: 'Editor Workbench', link: '/en/authoring/workbench' }
               ]
             }

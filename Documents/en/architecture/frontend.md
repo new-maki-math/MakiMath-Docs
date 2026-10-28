@@ -1,7 +1,9 @@
-# Frontend integration boundary
+# Frontend rendering and editing
 
-The previous English contract has been withdrawn: it described the removed course/section model. The verified backend baseline is main `df87ca0` (2026-10-27). This page does not claim that the frontend integration has shipped.
+Frontend baseline:64cc122. Renderer/TypstDoc.vue uses Typlet syntax parsing and mapped Vue nodes, with math rendered separately. MM extensions are separate from document parsing. The backend returns raw source, not the old doc AST; course presets are removed. This is not full Typst compilation. See [syntax and MM macros](../authoring/typst-guide.md).
 
-The Chinese contract is being updated first in this round. Use the [current reference](/architecture/frontend), [frontend integration sequence](/api/frontend-integration). The full English translation is pending; the old interface descriptions are no longer authoritative.
+Knowledge is maintained directly by administrators. Lecture sections store complete source. mm-knowledge resolves a slug to the current active point, with title and local mastery attached to its first top-level MM box. Missing points and retryable failures are distinct; nested references do not expand. See [references](../authoring/knowledge-reference.md).
 
-Knowledge points have stable identities and immutable submitted revisions. Lectures organize author blocks and references to specific approved knowledge revisions. Draft saves and submissions require edit_version. Lecture saves replace the complete tree and must preserve existing occurrence_id values. Review, publication and recommendation are separate concepts.
+TypstEditorPreview combines Monaco, reference insertion and preview. Optional bidirectional scroll synchronization is off by default and uses approximate source anchors. Unsupported fragments retain source and line/column diagnostics.
+
+Online saves use edit_version and chapter/section occurrence_id. Source references have no server instance identity. Review snapshots and working drafts are separate. Review approval increments the working draft version; refresh checks preserve unsaved input and report conflicts. Local lectures, mastery and changelog read state use browser IndexedDB, without account isolation or cross-device sync. This documentation round performed static review only.
