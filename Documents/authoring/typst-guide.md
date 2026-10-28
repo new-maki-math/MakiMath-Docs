@@ -19,7 +19,7 @@ MakiMath 在浏览器中用 Typlet 解析 Typst 语法，把已适配的正文�
 
 `text` / `#set text(...)` 支持静态字号、颜色、字体名称/数组、字重、字形、tracking、stretch、lang/region、dir、kerning、hyphenate、连字、数字样式、features 和 variations 的已适配值。不能使用变量、计算表达式或条件规则代替静态值；region 需要同时有 lang。字体是否可用、OpenType 特性是否生效仍取决于浏览器与字体。`#set text(...)` 作用于当前解析内容范围后续节点，不等同于完整 Typst 样式系统。
 
-表格列数为 1–1000 的静态整数，或由支持的静态长度、`auto`、`fr` 构成的列宽数组。适配 `align/inset/fill/stroke`，部分可用列样式数组；cell 可用正整数 colspan/rowspan、静态 x/y 和已适配样式。占位网格最多 20000 格，线条不能穿过被合并单元格的内部，不支持自动定位 hline/vline。不能据此推断所有官方 table 参数均可用。
+表格列数为 1–1000 的静态整数，或由支持的静态长度、`auto` 构成的列宽数组。适配 `align/inset/fill/stroke`，部分可用列样式数组；cell 可用正整数 colspan/rowspan、静态 x/y 和已适配样式。占位网格最多 20000 格，线条不能穿过被合并单元格的内部，不支持自动定位 hline/vline。不能据此推断所有官方 table 参数均可用。
 
 ```typst
 = 极限
@@ -74,3 +74,5 @@ MM 宏是站点扩展，不是 Typst 官方函数。`[正文]` 表示内容块�
 `mm-tag` 的预设颜色仅 `blue/cyan/green/orange/rose/purple`；也接受静态 `rgb(...)` / `color.rgb(...)`，例如 `rgb("B22234")`。不支持的颜色或参数会提示并回退默认蓝色；缺少正文则无法按标签渲染。标签正文、box 标题和题目标题不接受独立公式、块级表格等内容。
 
 选项列数会在窄容器下降为两列或一列，不保证任何屏幕都固定四列。填空只画留白，题目宏不提供自动判分、答案提交或题库记录。
+
+当前静态长度接受无单位0，或非负pt/mm/cm/in/em/%字面量；tracking另支持负值。fr与计算长度不在适配范围内。

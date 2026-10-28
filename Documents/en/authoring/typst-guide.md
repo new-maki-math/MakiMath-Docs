@@ -17,7 +17,7 @@ Consult the official [math](https://typst.app/docs/reference/math/), [text](http
 
 Supported static text properties include size, color, font names/arrays, weight/style, tracking/stretch, lang/region, direction, kerning, hyphenation, ligatures, numeric styles, features and variations. Region requires lang. Font availability and OpenType behavior depend on browser/fonts. Variables, computed values and conditional rules are not supported substitutes.
 
-Tables accept 1–1000 static columns or supported static length/auto/fr widths, with up to 20000 occupied grid slots. Lines cannot cut through merged cells, and automatic hline/vline positions are not supported. Unsupported syntax remains visible with line/column diagnostics. Arbitrary let, functions, loops, conditions, import/include/packages, show rules, page settings and file operations are outside this renderer's supported execution model. Legacy course adapters and defbox/thmbox/zt/makitag are no longer used.
+Tables accept 1–1000 static columns or supported static length/auto widths, with up to 20000 occupied grid slots. Lines cannot cut through merged cells, and automatic hline/vline positions are not supported. Unsupported syntax remains visible with line/column diagnostics. Arbitrary let, functions, loops, conditions, import/include/packages, show rules, page settings and file operations are outside this renderer's supported execution model. Legacy course adapters and defbox/thmbox/zt/makitag are no longer used.
 
 ## The 13 MM macros
 
@@ -54,3 +54,5 @@ All seven box macros require exactly one body and only allow the optional `title
 ```
 
 Option columns collapse on narrow containers. These macros do not provide answer submission, grading or question-bank records. See [knowledge references](./knowledge-reference.md) for source conventions and local mastery.
+
+Static lengths currently accept unitless0 or nonnegative pt/mm/cm/in/em/% literals; tracking additionally supports negatives. fr and computed lengths are not supported.

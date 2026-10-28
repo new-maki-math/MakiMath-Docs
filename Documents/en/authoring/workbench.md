@@ -1,58 +1,19 @@
-# Editor Workbench Guide
+# Authoring workbench
 
-::: warning Pending model review
-This page retains legacy instructions and is not the current API contract. Course/section endpoints have been removed; executable scene code is not supported. Use the [current integration guide](/api/frontend-integration). Do not initialize an existing database from these legacy instructions.
-:::
+/lecture-workbench (legacy /workbench redirects) groups local lectures, online lectures and archives. Private trees show the working draft and read-only review snapshots. Guests may create/import/edit browser-local lectures; online editing requires login and owner/admin/edit-collaborator permission. /knowledge-workbench is administrator-only and directly edits current knowledge, with no knowledge review submission.
 
+Chapter/section metadata and source can be edited, added, removed and reordered. Preview supports only the documented Typst/MM subset. Optional synchronized scrolling is off by default. Unsaved navigation prompts for save/discard; online409 conflicts require preserving input and reloading.
 
-The Lecture Workbench (`/workbench`) is the primary authoring workspace in MakiMath. It integrates tree navigation, source editing, knowledge graph linking, and live WASM previews into a single unified interface.
+Save first, then submit after UI confirmation and a5-second wait. Submission creates a separate pending snapshot, leaving the working draft editable. Only one pending snapshot per lecture is allowed. Approval publishes the snapshot and changes the working draft concurrency version; visible-page refresh preserves unsaved edits and warns on conflict.
 
-## Three Main Panels
+Online routes are /lecture/online/{slug} and /doc/{sectionId}, with optional revision_id query. Local routes use /lecture/local/{slug} and browser storage. Downloading requires a unique local slug; editing a download does not overwrite online content.
 
-![Three Main Panels](/images/workbench-layout-en.svg)
+## Archive, restore and delete
 
-### 1. Hierarchy Tree Panel
-- **Browse Structure**: View all courses, chapters, and sections you have permission to edit.
-- **Drag-and-Drop Reordering**: Drag chapters or sections vertically; positions update and sync with the backend `pos` field automatically.
-- **Context Menus**: Right-click on tree nodes to create sections, edit metadata, duplicate nodes, or delete items.
+Owners/admins archive through three steps: intent, lecture-name check, impact/final confirmation. Handle unsaved changes first. Archiving retains all versions/content, removes recommendation and moves the lecture to archives. Authorized reading remains available; editing, submission, review, version copying, export, collaborator changes and normal publication updates are blocked.
 
-### 2. Typst Source Editor Panel
-- **Formula Snippets Toolbar**: Insert theorem templates, example callouts, matrices, and calculus symbols with one click.
-- **History Support**: Full undo (`Ctrl + Z`) and redo (`Ctrl + Y`) support.
-- **Unsaved Changes Warning**: Visual indicators warn you if unsaved edits are present to prevent accidental data loss.
+Owner/admin restoration returns withdrawn if a public pointer exists, otherwise unpublished, with recommendation false. Restoration never automatically republishes.
 
-### 3. WASM Vector Preview Panel
-- Powered by Typlet running directly inside the local browser thread.
-- Millisecond response times regardless of formula complexity, delivering true real-time feedback.
+Administrators may permanently delete an archived lecture through a separate three-step confirmation of intent, name/scope and irreversibility. This removes its identity, draft, all snapshots, directory, reviews and collaborators, not public knowledge or browser data. The backend independently checks admin permission and archived state; three UI steps do not mean three API calls. Local deletion only removes the browser copy. Check lists before retrying uncertain remote results.
 
-## Advanced Batch Operations
-
-When restructuring large courses or textbooks, the workbench provides several batch processing tools:
-
-### 1. Batch Move
-- Select multiple sections and migrate them to a target chapter in one action.
-- **Conflict Prevention**: If identical slugs already exist in the target chapter, the system appends `-1`, `-2` to prevent unique constraint collisions.
-
-### 2. Batch Copy
-- Duplicate selected sections with a single click (automatically appends `(Copy)` to titles and assigns the next available sort index).
-- Works across chapters to easily duplicate standard exercise sets or common derivations.
-
-### 3. Batch Delete
-- Select and safely purge multiple sections after a confirmation prompt, automatically updating associated dependency edges.
-
-## Prerequisite Picker (PrereqPicker)
-
-In the section properties drawer, click **Edit Prerequisites** to open the modal:
-
-1. **Visual Search**: Filter candidate sections by chapter or search keywords.
-2. **Safety & Loop Validation**:
-   - The current section is disabled from self-selection.
-   - All connections must form a strict Directed Acyclic Graph (DAG); potential circular references are caught and blocked immediately.
-3. **Instant Sync**: Saving prerequisites triggers immediate rerendering of the course roadmap graph.
-
-## Conflict Negotiation & Concurrent Saves
-
-To prevent editors from accidentally overwriting each other's work:
-
-1. **SHA-256 Hashing**: Every section loaded into the workbench includes its server-side `source_hash`.
-2. **Conflict Guard**: If another author commits a newer version in the interim, your save request will be intercepted with a prompt showing the latest changes, keeping your content safe.
+Portable JSON exchanges one version; chapter batch import appends.typ sections and requires saving afterward. See [import/export](./import-export.md).
