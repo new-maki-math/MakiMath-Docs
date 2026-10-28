@@ -1,67 +1,75 @@
 # 知识点 API
 
-知识点是可独立引用的公共知识实体；版本保存其某次确定的内容。表中使用完整路径。字段未标可选的均必填。通用规则见[接口约定](./overview.md)。
+知识点由管理员直接维护，不再提供知识点版本、草稿提交或审核接口。公开正文为当前 active 数据，引用不会固定旧版本。知识点的永久 id 仍用于前置关系与浏览器掌握状态。请求加密见[接口约定](./overview.md)。
 
-表内 `{id}`、`{revisionId}` 为必填路径参数，取值为正整数。Body 表示 JSON 请求体，Query 表示查询参数；未标“可选”的请求字段均必填。成功响应列说明 HTTP 状态和解密后的数据，完整字段见下文。
+接口表使用完整路径。`{id}` 为正整数，`{slug}` 为最长100的小写字母/数字及分隔连字符。请求对象拒绝未知字段，未标可选的字段必填。
 
 | 路径 | 方法 | 接口说明 | 权限 | 请求参数 | 成功响应 |
 | --- | --- | --- | --- | --- | --- |
-| `/api/knowledge-points` | `GET` | 列出公开知识点 | 无需认证 | 无请求体 | `200`：`[{ id, slug, status, revision_id, title, summary }]` |
-| `/api/knowledge-points/{id}` | `GET` | 读取当前公开知识点版本 | 无需认证 | 无请求体 | `200`：当前公开详情 |
-| `/api/knowledge-points/{id}/revisions/{revisionId}` | `GET` | 读取指定已审核版本 | 无需认证 | 无请求体 | `200`：指定 approved 版本详情，无 categories |
-| `/api/knowledge-points` | `POST` | 创建知识点和首个草稿 | 已登录用户 | Body：`slug`, `title`, `source` | `201`：`{ point, revision }` |
-| `/api/knowledge-revisions/mine` | `GET` | 列出自己的知识点版本 | 已登录用户 | 无请求体 | `200`：自己的版本摘要数组 |
-| `/api/knowledge-revisions/{id}` | `GET` | 读取知识点版本 | 登录；非 approved 限版本贡献者或管理员 | 无请求体 | `200`：版本行 |
-| `/api/knowledge-points/{id}/revisions` | `POST` | 复制已提交版本为草稿 | 登录；非 approved 来源限版本贡献者或管理员 | Body：`based_on_id` | `201`：新草稿版本行 |
-| `/api/knowledge-revisions/{id}` | `PUT` | 完整保存知识点草稿 | 版本贡献者或管理员 | Body：完整保存体，见下文（全部顶层字段必填） | `200`：版本行 |
-| `/api/knowledge-revisions/{id}/submit` | `POST` | 提交知识点版本审核 | 版本贡献者或管理员 | Body：`edit_version` | `200`：pending 版本行 |
-| `/api/knowledge-points/{id}/prerequisites` | `GET` | 读取公开前置知识点 | 无需认证 | 无请求体 | `200`：`[{ id, slug, revision_id, title }]` |
-| `/api/knowledge-points/{id}/prerequisites` | `PUT` | 替换前置知识点关系 | 管理员 | Body：`prerequisites`：ID 数组 | `200`：`{ knowledge_point_id, prerequisites }` |
-| `/api/knowledge-points/{id}/categories` | `PUT` | 替换知识点分类关联 | 管理员 | Body：`categories`：ID 数组 | `200`：`{ knowledge_point_id, categories }` |
-| `/api/knowledge-points/{id}/status` | `PATCH` | 更新知识点状态 | 管理员 | Body：`status`：active / disabled / archived | `200`：知识点身份行 |
+| `/api/knowledge-points` | `GET` | 列出有效知识点 | 公开 | 无 | 200，`[{ id, slug, title }]` |
+| `/api/knowledge-points/{id}` | `GET` | 按ID读取正文 | 公开 | Path：id | 200，公开详情 |
+| `/api/knowledge-points/by-slug/{slug}` | `GET` | 按slug读取正文 | 公开 | Path：slug | 200，公开详情 |
+| `/api/knowledge-map` | `GET` | 读取知识地图 | 公开 | Query：category_id可选 | 200，地图对象 |
+| `/api/knowledge-points/manage` | `GET` | 管理列表 | 管理员 | 无 | 200，管理摘要数组 |
+| `/api/knowledge-points/manage/{id}` | `GET` | 管理详情 | 管理员 | Path：id | 200，知识点行 |
+| `/api/knowledge-points` | `POST` | 创建知识点 | 管理员 | Body：slug、title、source | 201，知识点行 |
+| `/api/knowledge-points/{id}` | `PUT` | 修改标题和正文 | 管理员 | Body：title、source | 200，知识点行 |
+| `/api/knowledge-points/import` | `POST` | 批量导入 | 管理员 | Body：category_id、data | 201，导入映射 |
+| `/api/knowledge-points/{id}/status` | `PATCH` | 归档或恢复 | 管理员 | Body：status=active/archived | 200，知识点行 |
+| `/api/knowledge-points/{id}/prerequisites` | `GET` | 读取有效直接前置 | 公开 | Path：id | 200，`[{ id, slug, title }]` |
+| `/api/knowledge-points/{id}/prerequisites` | `PUT` | 替换前置关系 | 管理员 | Body：prerequisites，ID数组 | 200，`{ knowledge_point_id, prerequisites }` |
+| `/api/knowledge-points/{id}/categories` | `PUT` | 替换分类关联 | 管理员 | Body：categories，ID数组 | 200，`{ knowledge_point_id, categories }` |
+| `/api/knowledge-points/{id}` | `DELETE` | 永久删除知识点及关联 | 管理员 | 无Body | 204，无响应体 |
+| `/api/categories/knowledge/{id}` | `DELETE` | 删除分类树及仅归属该树的知识点 | 管理员 | 无Body | 204，无响应体 |
 
-公开接口要求知识点 active，所读版本 approved。当前详情字段为 `id, slug, revision_id, revision_no, title, summary, source, animation, metadata, categories`，categories 为 `[{ id, slug, name }]`。指定版本可以不是当前公开版，但须属于该知识点并审核通过。
+公开详情为 `{ id, slug, title, source, categories }`，categories为 `[{ id, slug, name }]`；点非active或不存在均404。知识点列表、地图、管理读取及两种公开详情带 `Cache-Control: no-store`。知识点行字段为 `id, slug, title, source, status, created_by, updated_by, created_at, updated_at`；管理摘要不带source，增加category_ids数组。知识点状态只支持active/archived，不再支持disabled。
 
-知识点身份行：`id, slug, status, public_revision_id, created_by, created_at, updated_at`。
+| 创建/修改字段 | 类型 | 必填 | 约束 |
+| --- | --- | --- | --- |
+| slug | string | 仅创建时必填 | 最长100，创建后无修改接口 |
+| title | string | 是 | 非空，最长200 |
+| source | string | 是 | 非空，最长200000；原样保存，不校验MM宏或单box结构 |
 
-版本行：`id, knowledge_point_id, revision_no, based_on_id, title, summary, source, animation, metadata, change_note, contributor_id, edit_version, status, submitted_at, reviewed_at, created_at, updated_at`。首版 revision_no=1、edit_version=1、status=draft；summary/change_note 为空，animation/based_on_id/审核时间为 null，metadata 为 `{}`。
+没有edit_version，不能宣称知识点更新支持乐观并发保护。前置与分类数组为整组替换，最多100个ID，不得重复；空数组清空。数据库防止前置成环。正文单box约定见[编写说明](../authoring/knowledge-reference.md)。
 
-mine 返回 `id, knowledge_point_id, revision_no, title, status, edit_version, submitted_at, updated_at`，管理员也只返回自己的版本。
+## 知识地图
 
-## 完整保存体
-
-所有顶层字段必填。示例已静态核对，未做真实数据库请求。
+category_id为可选正整数，给定时须是有效知识分类，否则404。nodes包括范围内active点，edges只包括两端都在结果中的边；方向是前置source → 后续target。categories始终返回全量有效分类，不是只返回筛选子树。响应：
 
 ```json
 {
-  "edit_version": 1,
-  "title": "数列极限的定义",
-  "summary": "数列收敛的定义",
-  "source": "== 数列极限\n数列收敛的定义正文。",
-  "animation": null,
-  "metadata": {},
-  "change_note": "补充定义"
+  "categories": [{ "id": 1, "parent_id": null, "slug": "analysis", "name": "分析", "pos": 0 }],
+  "nodes": [{ "id": 11, "slug": "sequence-limit", "title": "数列极限", "category_ids": [1] }],
+  "edges": [],
+  "stats": { "category_count": 1, "node_count": 1, "edge_count": 0 },
+  "filter": { "category_id": 1, "include_descendants": true }
 }
 ```
 
-保存和提交都必须带最近读到的 edit_version，成功都会加一。提交体仅 `{ "edit_version": 2 }`；提交要求非空正文。只有 draft 可保存、提交；pending/approved/rejected 不可继续编辑，要复制为新草稿。
+此为结构示例，ID并非固定数据，未做运行验证。
 
-复制的 based_on_id 必须属于同一知识点且非 draft；允许复制有权限的 pending/rejected 或任意 approved。新贡献者为当前用户。知识点非 active 时创建新版本返回 409；现有草稿保存/提交未同样检查身份状态，是否应阻断这类操作仍待确认。
+## JSON批量导入
 
-前置关系与分类关联为整组替换，数组最长 100，不可重复；空数组清空。数据库检查知识点前置及分类父子关系成环。公开前置列表过滤不可公开的前置点。
+目标category_id须为active一级知识分类。data仅接受schema_version、categories、points、edges，局部ID是文件内非空字符串，不是数据库ID。分类根节点挂到目标分类；点未指定category_ids或为空时归入目标分类。导入为事务新增，不覆盖已有同slug记录。
 
-主要错误：参数/重复数组 400；权限 403；不存在或不可公开 404；重复 slug、旧并发号、非草稿操作、复制草稿、外键/成环等冲突 409（自引用检查约束可能为 400）。
+```json
+{
+  "category_id": 1,
+  "data": {
+    "schema_version": 1,
+    "categories": [{ "id": "c1", "parent_id": null, "slug": "limits", "name": "极限", "pos": 0 }],
+    "points": [{ "id": "p1", "slug": "sequence-limit", "title": "数列极限", "source": "#mm-box-definition[定义正文]", "category_ids": ["c1"] }],
+    "edges": []
+  }
+}
+```
 
-## 草稿保存参数定义
+201返回 `{ category_id, counts: { categories, points, edges }, categories: [{ id, category_id }], points: [{ id, point_id }] }`。映射里的id为文件局部ID，其余为新数据库ID。
 
-适用于 `PUT /api/knowledge-revisions/{id}`；以下字段均位于 Body。提交接口只接受 `edit_version`，不能携带其余字段。
+data序列化后最多2 MiB，最多150分类、1000点、6000边、10000分类关联，每点最多100分类；同时受整个加密请求体4 MiB限制。categories字段如示例全部必填；points仅category_ids可选。边为 `{ source, target }` 局部点ID，source为前置，target为后续。文件内引用须存在，关系不能成环。
 
-| 参数 | 类型 | 必填 | 说明与约束 |
-| --- | --- | --- | --- |
-| `edit_version` | integer | 是 | 最近读取的并发号，至少 1 |
-| `title` | string | 是 | 非空，最长 200 字符 |
-| `summary` | string | 是 | 可为空，最长 5000 字符 |
-| `source` | string | 是 | 草稿可为空，最长 200000 字符 |
-| `animation` | object / null | 是 | 不允许可执行场景字段 |
-| `metadata` | object | 是 | 不能是数组或 null |
-| `change_note` | string | 是 | 可为空，最长 2000 字符 |
+## 删除与错误
+
+删除知识点清理其分类及所有入/出前置关系；讲义源码不改写，相关引用可能显示缺失。本地掌握记录和批注不自动清理。删除分类会连同子分类一起删除，仅属于该范围的点被删除；还属于范围外分类的点保留。知识点删除不要求先归档。
+
+主要错误：字段/类型/大小/重复关系400；未登录401；非管理员403；不存在或不可公开404；同slug、无效关联、导入目标非有效一级分类等409。导入错误可带details中的field/index/property/id/slug。网络失败时新增是否成功可能未知，先查列表，不直接重复导入。

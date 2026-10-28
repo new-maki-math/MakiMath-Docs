@@ -1,7 +1,7 @@
-# Communication and authorization
+# Communication and authorization boundaries
 
-The previous English contract has been withdrawn: it described the removed course/section model. The verified backend baseline is main `df87ca0` (2026-10-27). This page does not claim that the frontend integration has shipped.
+The existing ECDH/AES-GCM envelope does not replace HTTPS or authorization and cannot prevent an authorized client reading content. Bearer authentication checks current account/session state; refresh rotates tokens. Logout deletes a session matching the supplied refresh token, even though unmatched tokens also return204. Password changes and account disablement revoke all user sessions.
 
-The Chinese contract is being updated first in this round. Use the [current reference](/architecture/security), [frontend integration sequence](/api/frontend-integration). The full English translation is pending; the old interface descriptions are no longer authoritative.
+Admins maintain knowledge; lecture owner/view/edit/admin permissions are enforced server-side. Read-only snapshots cannot be edited, but admins may permanently delete archived lectures through the restricted deletion endpoint. UI three-step confirmation is additional protection, not server authorization.
 
-Knowledge points have stable identities and immutable submitted revisions. Lectures organize author blocks and references to specific approved knowledge revisions. Draft saves and submissions require edit_version. Lecture saves replace the complete tree and must preserve existing occurrence_id values. Review, publication and recommendation are separate concepts.
+The backend neither executes Typst nor validates every reference target. Frontend rendering is limited to supported mappings, not arbitrary scripting. There are no legacy animation API fields. Portable JSON omits identity/session top-level fields but does not sanitize arbitrary source/metadata. Custom server private keys must match the published public key. Self-review remains allowed pending a separate product decision.

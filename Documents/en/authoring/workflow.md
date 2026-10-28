@@ -1,7 +1,9 @@
-# Knowledge contributions and lecture composition
+# Knowledge maintenance and lecture composition
 
-The previous English contract has been withdrawn: it described the removed course/section model. The verified backend baseline is main `df87ca0` (2026-10-27). This page does not claim that the frontend integration has shipped.
+Admins maintain current public knowledge; authors compose lecture source and reference slugs. These are distinct editing workflows. Knowledge IDs key mastery, slugs key source references. There is no knowledge revision review.
 
-The Chinese contract is being updated first in this round. Use the [current reference](/authoring/workflow), [frontend integration sequence](/api/frontend-integration). The full English translation is pending; the old interface descriptions are no longer authoritative.
+Lectures have chapters/sections with complete source: author prose, MM boxes and knowledge macros. Preserve chapter/section occurrence_id on whole-tree saves; source references have no server instance ID. Online draft saves require edit_version.
 
-Knowledge points have stable identities and immutable submitted revisions. Lectures organize author blocks and references to specific approved knowledge revisions. Draft saves and submissions require edit_version. Lecture saves replace the complete tree and must preserve existing occurrence_id values. Review, publication and recommendation are separate concepts.
+Submission copies saved content into an independent pending snapshot while the draft stays editable; one pending snapshot per lecture. Approval publishes the snapshot and updates draft concurrency state. Preserve unsaved input before reload. Snapshots freeze source, not current knowledge bodies.
+
+Recommendation is separate from publication. Archives are read-only; owner/admin restore does not republish; admin may permanently delete. Portable exchange contains one version, not review/publication history. See [workbench](./workbench.md), [references](./knowledge-reference.md), [import/export](./import-export.md).

@@ -1,0 +1,11 @@
+# Review, categories and management
+
+Full paths and encryption apply. GET /api/reviews/lecture/pending returns pending snapshot rows to admins. POST /api/reviews/lecture/{id} requires decision approved/rejected and comment (required string, empty allowed, max5000);201 returns id,lecture_revision_id,reviewer_id,decision,comment,created_at. ID means snapshot.id, not working draft ID. kind=knowledge is rejected400.
+
+Only pending snapshots can be reviewed; duplicates/nonpending409, missing404. Archives reject review409. Approval checks the most recent approved base ancestor still matches the public pointer, publishes the snapshot, updates the working draft base/version; rejection leaves public content unchanged. Admin self-review is currently allowed. Review/publication/recommendation remain different states; approving a new version preserves an existing recommendation.
+
+Categories use public GET /api/categories/{kind}, admin POST there (slug/name required, parent_id/descr/pos optional), and admin PUT /api/categories/{kind}/{id} (parent_id/name/descr/pos/status all required). kind is knowledge/lecture, status active/archived. Knowledge category subtree deletion is documented in [knowledge API](./knowledge.md).
+
+GET /api/search requires nonempty q up to100 characters, optional integer limit1–100 default20; returns `{hits}`. Knowledge hits are `{type:"knowledge",id,slug,title}`; lecture hits add revision_id,descr. Matching is case-insensitive substring: knowledge title/source, published lecture title/description/raw section source. Referenced knowledge bodies are not expanded for lecture search. Sort is type/id, not relevance.
+
+Admin management endpoints: POST/GET /api/invitations; DELETE /api/invitations/{id} revokes and returns200 row; GET /api/users; PATCH /api/users/{id}/status with active/disabled; GET /api/audit-logs with optional limit1–100 default20. Invitation creation requires role editor/super_admin and max_uses1–1000, optional note/expiry. Disabling the current account conflicts409. Disabled accounts lose sessions. The first admin is created via the local admin:init command, not an anonymous HTTP endpoint. Full field definitions remain in the [Chinese management reference](/api/review).

@@ -1,7 +1,7 @@
 # System architecture
 
-The previous English contract has been withdrawn: it described the removed course/section model. The verified backend baseline is main `df87ca0` (2026-10-27). This page does not claim that the frontend integration has shipped.
+Current baselines are in [integration](../api/frontend-integration.md). Public knowledge has stable IDs, current admin-maintained source, classifications and prerequisites. It no longer has knowledge revision review. Lectures organize complete source by chapter/section; mm-knowledge resolves slugs dynamically. Point IDs, lecture IDs, version IDs and chapter/section occurrence IDs serve different purposes.
 
-The Chinese contract is being updated first in this round. Use the [current reference](/architecture/overview), [frontend integration sequence](/api/frontend-integration). The full English translation is pending; the old interface descriptions are no longer authoritative.
+Submission copies a saved working draft to an independent pending snapshot, leaving the draft editable. Approval publishes the complete snapshot; recommendation is separate. Snapshots freeze author source, not the referenced current public knowledge. The old fixed knowledge-revision reference rule no longer describes this implementation.
 
-Knowledge points have stable identities and immutable submitted revisions. Lectures organize author blocks and references to specific approved knowledge revisions. Draft saves and submissions require edit_version. Lecture saves replace the complete tree and must preserve existing occurrence_id values. Review, publication and recommendation are separate concepts.
+The backend passes source through; the frontend maps supported Typst syntax to web components, not full compilation. Nested knowledge references do not expand. Public reading and private/management authorization remain separate. Local lectures/mastery/changelog read state live in browser IndexedDB without account or cross-device synchronization. Knowledge prerequisites are independent of lecture directories.
