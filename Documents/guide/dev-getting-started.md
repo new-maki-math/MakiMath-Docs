@@ -1,9 +1,9 @@
 # 开发接入准备
 
-后端基线为main df87ca0，Node.js 22+。前端与后端分别安装依赖、运行各自dev脚本；前端开发代理与实际页面接入状态须由前端验证。后端默认127.0.0.1:3000，/health检查数据库连接。
+当前前后端基线见[接入流程](../api/frontend-integration.md)。后端需Node.js22+、PostgreSQL及项目依赖，默认127.0.0.1:3000，/health检查数据库连接。前端由Vite开发服务代理/api，具体代理目标以环境配置为准。
 
-Database/schema.sql仅初始化空数据库，不包含旧模型迁移，也没有默认管理员账号。不要将它当成已有库的增量迁移脚本。首个管理员配置方式本轮尚未纳入已提交基线；随后由管理员创建邀请码，注册编者后单独登录。后端运行配置见提交内src/config.js；本轮不重新验收部署脚本。
+Database/schema.sql仅初始化空库，没有默认管理员密码。新环境在完成结构初始化和后端.env配置后，在后端交互终端运行npm run admin:init；命令先显示实际目标库，确认后输入账号资料与两次隐藏密码，已有有效管理员时拒绝新增，不创建数据库或执行结构脚本。不要把密码放在提交或命令行参数中。
 
-当前接口已经替换旧课程/小节模型。先读[前端接入流程](../api/frontend-integration.md)，再按[认证](../api/auth.md)、[知识点](../api/knowledge.md)、[讲义](../api/lectures.md)、[审核](../api/review.md)联调。草稿保存携带edit_version，讲义按完整树替换，引用固定已审核知识点版本。
+已有库使用[手工升级说明](../deploy/database-upgrade.md)，不能以重建库代替迁移。配置中的同名进程环境变量优先于.env，操作前以实际目标为准。
 
-后端npm test默认不做真实数据库集成；需独立、已初始化且名称以_test结尾的数据库并显式启用MAKIMATH_INTEGRATION=1才执行集成测试。本轮未运行真实数据库集成流程。
+接口已不再提供knowledge-revisions、旧courses/sections、固定版本blocks或动画。知识点管理员直接维护；讲义单工作草稿保存带edit_version，提交生成独立快照，宏按slug读取当前知识点。当前文档轮次未运行构建、测试或浏览器，仅做静态核对。

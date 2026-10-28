@@ -1,5 +1,9 @@
 # Self-Hosting Guide
 
+::: warning Existing database upgrades
+Manual SQL under Database/manual is not applied by deployment scripts. Use the [manual upgrade guide](./database-upgrade.md); deploying source or applying it locally does not upgrade a remote database.
+:::
+
 ::: warning Pending model review
 This page retains legacy instructions and is not the current API contract. Course/section endpoints have been removed; executable scene code is not supported. Use the [current integration guide](/api/frontend-integration). Do not initialize an existing database from these legacy instructions.
 :::

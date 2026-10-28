@@ -26,7 +26,8 @@ export default defineConfig({
               text: '基础认知',
               items: [
                 { text: '快速上手总览', link: '/guide/getting-started' },
-                { text: '项目概述', link: '/guide/overview' }
+                { text: '项目概述', link: '/guide/overview' },
+                { text: '更新日志', link: '/guide/update-log' }
               ]
             },
             {
@@ -46,10 +47,11 @@ export default defineConfig({
             {
               text: '讲义创作',
               items: [
-                { text: '知识点贡献与讲义编排', link: '/authoring/workflow' },
+                { text: '知识点维护与讲义编排', link: '/authoring/workflow' },
                 { text: 'Typst 语法与 MM 宏', link: '/authoring/typst-guide' },
                 { text: '知识点引用与掌握', link: '/authoring/knowledge-reference' },
-                { text: '编者工作台指南', link: '/authoring/workbench' }
+                { text: '编者工作台指南', link: '/authoring/workbench' },
+                { text: '讲义JSON与小节导入', link: '/authoring/import-export' }
               ]
             }
           ],
@@ -82,6 +84,7 @@ export default defineConfig({
               text: '部署运维',
               items: [
                 { text: '私有化部署指南', link: '/deploy/self-host' },
+                { text: '既有数据库手工升级', link: '/deploy/database-upgrade' },
                 { text: '环境变量参考', link: '/deploy/environment' },
                 { text: 'Nginx 反向代理配置', link: '/deploy/nginx' }
               ]
@@ -119,6 +122,7 @@ export default defineConfig({
           { text: 'Architecture', link: '/en/architecture/overview' },
           { text: 'API', link: '/en/api/overview' },
           { text: 'Deploy', link: '/en/deploy/self-host' },
+                { text: 'Manual Database Upgrades', link: '/en/deploy/database-upgrade' },
           { text: 'Contributing', link: '/en/contributing/guide' }
         ],
         sidebar: {
@@ -127,7 +131,8 @@ export default defineConfig({
               text: 'Overview',
               items: [
                 { text: 'Quickstart Overview', link: '/en/guide/getting-started' },
-                { text: 'Project Overview', link: '/en/guide/overview' }
+                { text: 'Project Overview', link: '/en/guide/overview' },
+                { text: 'Update Log', link: '/en/guide/update-log' }
               ]
             },
             {
@@ -147,10 +152,11 @@ export default defineConfig({
             {
               text: 'Content Authoring',
               items: [
-                { text: 'Lecture Structure & DAG', link: '/en/authoring/workflow' },
+                { text: 'Knowledge & Lecture Authoring', link: '/en/authoring/workflow' },
                 { text: 'Typst Math Guide', link: '/en/authoring/typst-guide' },
                 { text: 'Knowledge References & Mastery', link: '/en/authoring/knowledge-reference' },
-                { text: 'Editor Workbench', link: '/en/authoring/workbench' }
+                { text: 'Editor Workbench', link: '/en/authoring/workbench' },
+                { text: 'Lecture JSON & Section Imports', link: '/en/authoring/import-export' }
               ]
             }
           ],
@@ -171,8 +177,10 @@ export default defineConfig({
               items: [
                 { text: 'Overview & Conventions', link: '/en/api/overview' },
                 { text: 'Auth & Session API', link: '/en/api/auth' },
-                { text: 'Courses & Tree API', link: '/en/api/courses' },
-                { text: 'Sections & Lecture Doc API', link: '/en/api/sections' }
+                { text: 'Knowledge API', link: '/en/api/knowledge' },
+                { text: 'Lecture API', link: '/en/api/lectures' },
+                { text: 'Review & Management', link: '/en/api/review' },
+                { text: 'Frontend Integration', link: '/en/api/frontend-integration' }
               ]
             }
           ],

@@ -1,25 +1,5 @@
-# Quickstart Guide
+# Getting started
 
-::: warning Pending model review
-This page retains legacy instructions and is not the current API contract. Course/section endpoints have been removed; executable scene code is not supported. Use the [current integration guide](/api/frontend-integration). Do not initialize an existing database from these legacy instructions.
-:::
+Readers explore public knowledge/prerequisites and mastery, or open published lectures in the workshop. Global knowledge search opens detail overlays. Mastery and local lectures remain in this browser.
 
-
-Welcome to the MakiMath documentation center! To help you find the right information quickly, select your primary role:
-
-::: tip 🛠️ For Developers
-If you want to spin up the full stack locally, build new features, or contribute code:
-- Covers Node.js, PostgreSQL setup, full-stack running, and debugging tips.
-- 👉 **Read the guide: [Developer Full-Stack Quickstart](./dev-getting-started.md)**
-:::
-
-::: tip ✍️ For Editors & Authors
-If you are a math teacher or lecture author looking to compose courseware and structure knowledge graphs:
-- Zero local toolchain installation needed; write and preview directly in your browser.
-- 👉 **Read the guide: [Editor Onboarding & Quickstart](./editor-getting-started.md)**
-:::
-
-## Learn More
-
-- Want to understand our architectural philosophy first? 👉 Read [Project Overview](./overview.md)
-- Looking for math formula syntax? 👉 Read [Typst Math Guide](../authoring/typst-guide.md)
+Authors start with [editor setup](./editor-getting-started.md), [workbench](../authoring/workbench.md), [syntax/MM](../authoring/typst-guide.md) and [imports](../authoring/import-export.md). Only admins manage public knowledge; editors compose their own lectures and references. Developers use [integration](../api/frontend-integration.md); existing-database operators read [manual upgrades](../deploy/database-upgrade.md). The [update log](./update-log.md) is release information, not the API contract.
