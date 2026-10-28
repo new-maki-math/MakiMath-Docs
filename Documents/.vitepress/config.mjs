@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  base: '/MakiMath-Docs/',
+  base: '/',
   title: 'MakiMath',
   description: 'Structured Mathematics Learning Platform',
 
