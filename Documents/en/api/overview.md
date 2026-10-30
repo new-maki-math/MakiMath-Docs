@@ -1,9 +1,41 @@
 # API conventions
 
-Backend baseline and static verification scope appear in [integration](./frontend-integration.md). Tables use complete /api paths; do not prefix twice. Path IDs are positive safe integers. Request objects reject unknown fields. JSON examples represent pre-encryption requests or decrypted responses, not raw HTTP payloads.
+::: info Code baseline
+Backend main 62ad91f, frontend main e3a2aa1, v1.1.0-beta. Examples were checked statically, without live requests.
+:::
 
-Use Bearer access tokens; refresh tokens go in request bodies. GET /api/auth/pubkey returns plain ok/pubkey. Other populated successful API JSON responses use the existing AES-256-GCM envelope `{d}` with12-byte IV,16-byte tag and ciphertext, Base64 encoded. P-256 ECDH uses the client raw65-byte public key in x-cp. POST/PUT/PATCH bodies must be encrypted; GET also needs the appropriate decryption context.204 has no body; errors are plain JSON. HTTPS remains necessary.
+Tables contain complete /api paths; do not add the prefix twice. Braced path values are placeholders. Resource IDs are positive safe integers. Slugs allow lowercase letters/digits and separating hyphens, up to 100 characters. Object bodies reject unknown fields with 400.
 
-The full encrypted HTTP body is limited to4MiB; lists are not paginated and rate limit is300/minute. Knowledge imports have an additional2MiB data limit. Counts do not imply unlimited file size. Error bodies contain error and optionally details:400 parameters,401 authentication,403 authorization,404 missing/unreadable,409 concurrency/business constraints,413 size,429 rate,500 server.
+See [authentication](./auth.md), [lectures](./lectures.md), [knowledge](./knowledge.md) and [review/management](./review.md). Legacy courses/chapters/sections endpoints and knowledge-revisions are removed.
 
-Knowledge points are admin-maintained current source with no revision/edit_version workflow. Lecture drafts require edit_version; submission creates an independent review snapshot. Source is passed through unchanged, without server Typst parsing or reference validation. No blocks/animation API exists. See [knowledge](./knowledge.md), [lectures](./lectures.md), [review](./review.md) and the [Typst subset](../authoring/typst-guide.md).
+## Authentication and transport
+
+Send Authorization: Bearer with the access_token, not a refresh token or cookie. The server checks current account/session state as well as JWT validity.
+
+GET /api/auth/pubkey returns plain `{ok:true,pubkey}`. Browser P-256 ECDH sends a Base64 raw 65-byte public key in x-cp. The shared 256-bit value is used directly for AES-256-GCM. Envelopes are `{d: Base64(12-byte IV + 16-byte tag + ciphertext)}`.
+
+Nonempty POST/PUT/PATCH JSON bodies must be encrypted. GET also needs the right x-cp because populated 2xx API responses are encrypted. Do not parse/decrypt an empty 204; errors are plain JSON. The public-key exemption uses the exact URL, without query parameters; /health is outside encryption. Existing frontend src/api/client.js handles this layer.
+
+The server's missing-x-cp compatibility key is for scripts, not browser distribution. HTTPS is still needed. Documentation examples show data before encryption or after decryption, not valid plain HTTP POST payloads.
+
+## Errors and limits
+
+Errors contain error and optionally details; rely on HTTP state rather than localized wording.
+
+| Status | Typical cause |
+| --- | --- |
+| 400 | Missing/unknown fields, invalid types/envelope or database checks |
+| 401 / 403 | Missing/invalid session / insufficient permission |
+| 404 | Missing resource or unavailable through that reading entry |
+| 409 | Draft version, archive restriction, duplicate submission/review, uniqueness or relation conflict |
+| 413 / 429 / 500 | Oversize / rate limit / unmapped server error |
+
+Lecture edit_version changes on whole-tree saves, section saves, cover changes and approval updates to the source draft. Body reads use the version from the outline. Preserve local input before reloading on 409. Knowledge has no concurrency field and uses the last successful write.
+
+The entire encrypted request body is limited to 4 MiB. Knowledge-import data also has a 2 MiB limit. Source length is at most 200000 JavaScript string units, not bytes; covers and Base64 consume request space. Lists are not paginated; rate limit is 300 requests/minute.
+
+## Data separation
+
+Outlines omit source; section bodies and covers load separately. Lecture IDs, revision IDs, edit_version and chapter/section occurrence UUIDs are different identifiers. Whole-tree saves replace the directory; use the section endpoint to update one existing section.
+
+The backend passes source through without AST construction or macro validation. A review snapshot freezes author source, while knowledge references resolve current active points by slug. Neither model exposes the legacy animation/scene-execution fields.

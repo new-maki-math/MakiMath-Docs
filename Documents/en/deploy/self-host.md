@@ -1,140 +1,67 @@
-# Self-Hosting Guide
+# Deployment and upgrades
 
-::: warning Existing database upgrades
-Manual SQL under Database/manual is not applied by deployment scripts. Use the [manual upgrade guide](./database-upgrade.md); deploying source or applying it locally does not upgrade a remote database.
-:::
+The backend service, product frontend and docs site publish separately. Their commands, configuration and outputs differ. The instructions below follow the current repository scripts.
 
-::: warning Pending model review
-This page retains legacy instructions and is not the current API contract. Course/section endpoints have been removed; executable scene code is not supported. Use the [current integration guide](/api/frontend-integration). Do not initialize an existing database from these legacy instructions.
-:::
+## Choose initialization or database reuse
 
+Apply Database/schema.sql only to an empty database. Back up an existing database and compare tables, columns, indexes and triggers before planning its upgrade.
 
-MakiMath supports full-featured private deployment on independent Linux instances, virtual machines, or bare-metal servers. This guide covers both automated script installation and manual step-by-step production configuration.
+Previously applied Database/manual scripts have been removed from the current repository. There is no complete ready-to-run package for arbitrary legacy schemas. Deployment checks available Database/migrations/*.sql; no files means no queued migration, not proof that remote schema matches code. A local upgrade is not evidence of remote application. Missing cover tables or working-draft constraints need a target-specific upgrade plan.
 
-## System Requirements
+Keep forceSchema omitted or false. The literal DROP_AND_REBUILD destroys the public schema; it is not a data-preserving upgrade. Initialization creates no default admin. Create the first one with npm run admin:init in the actual backend directory afterward.
 
-- **Operating System**: Ubuntu 22.04 / 24.04 LTS or Debian 12 recommended
-- **Runtime**: Node.js >= 22.0.0 (Native ESM & `--env-file` support required)
-- **Package Manager**: pnpm >= 9.0 or npm >= 10.0
-- **Database**: PostgreSQL >= 16 with `postgresql-contrib` (for `pg_trgm` fuzzy indexing)
-- **Web Gateway & Process Manager**: Nginx, PM2
+## Repository scripts
 
-## Method A: Automated Deployment Script (Recommended)
+Each project has its own private deploy.config.json, based on its example. These SSH scripts install dependencies, replace files and restart services; check server/directory before running.
 
-MakiMath includes automated SSH deployment scripts that install packages, initialize PostgreSQL, deploy files, and configure PM2 and Nginx.
+| Command | Current behavior |
+| --- | --- |
+| Backend npm run acl-deploy | deploy.ACL.js; Node checks, npm ci, systemd maki-math-backend, health database-name check; SSH key or password |
+| Backend npm run deploy | Legacy deploy.js using npm install and PM2, not an alias for the ACL/systemd flow |
+| Frontend npm run deploy | Builds dist locally, uploads frontend files, optionally changes Nginx and Certbot configuration |
+| Frontend npm run acl-deploy | A separate script with different system/service handling; check target compatibility |
 
-### 1. Prepare Configuration
-Create `deploy.config.json` in both `maki-math-backend` and `maki-math-frontend` roots:
+Example for backend ACL reuse of an existing database and remote .env:
 
 ```json
 {
-  "host": "YOUR_SERVER_IP",
-  "port": 22,
-  "username": "root",
-  "password": "YOUR_SERVER_SSH_PASSWORD",
-  "remoteBaseDir": "/var/www/maki-math",
-  "backendPort": 3000,
-  "domain": "math.yourdomain.com",
-  "email": "admin@yourdomain.com",
-  "setupDatabase": true,
-  "db": {
-    "name": "maki_math",
-    "user": "maki",
-    "password": "StrongDbPassword2026!"
-  }
+  "host": "server.example.com", "port": 22, "username": "deploy",
+  "privateKeyPath": "C:/keys/deploy_ed25519",
+  "remoteBaseDir": "/srv/maki-math", "backendPort": 3000,
+  "setupDatabase": false, "forceSchema": false,
+  "db": { "name": "maki_math_v3" }
 }
 ```
 
-### 2. Execute Deployment
-```bash
-# 1. Deploy backend & initialize database
-cd maki-math-backend
-node scripts/deploy.js
+This needs an existing usable remote .env and schema. Even with setupDatabase=false, set db.name to the target database and match the remote PGDATABASE: the preflight and health checks use this name. Replace maki_math_v3 with your actual database name. Enabling setupDatabase requires db.name/user/password. Supplying env replaces remote .env and requires JWT_SECRET plus exactly 32-byte PAYLOAD_SECRET_KEY; production JWT_SECRET needs at least 32 bytes. Without env, an existing remote file is retained; generation occurs only in the applicable initialization branch. Match backendPort, .env PORT and the proxy port.
 
-# 2. Build and deploy frontend SPA & Nginx
-cd ../maki-math-frontend
-node scripts/deploy.js
+The frontend script instead uses host/port/username/password/remoteBaseDir/domain/backendPort/email/configureNginx. The ordinary frontend script still validates domain/email with configureNginx=false. These system-package scripts are not automatically portable across arbitrary servers.
+
+## Domain and proxy
+
+Serve frontend files as the site root, with history fallback to index.html. Preserve the /api/ prefix when proxying. Replace the sample domain/path/port:
+
+```nginx
+server {
+    listen 80;
+    server_name math.example.com;
+    root /srv/maki-math/frontend;
+    client_max_body_size 4m;
+    location /api/ {
+        proxy_pass http://127.0.0.1:3000/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
 ```
 
-## Method B: Manual Step-by-Step Installation
+This illustrates HTTP; configure HTTPS for production. TRUST_PROXY=loopback fits a same-host proxy, while separate hosts need their actual trusted network. Raising a proxy size limit does not raise the backend's 4 MiB encrypted-body limit. Check the actual database name in /health, then login/outline/body behavior, not just the homepage.
 
-If you deploy behind restrictive firewall rules or use a managed cloud database (e.g. AWS RDS), follow these manual steps:
+## Docs site
 
-### 1. Install & Initialize PostgreSQL 16
-```bash
-# Install packages
-sudo apt update
-sudo apt install -y postgresql postgresql-contrib
-
-# Provision user & database
-sudo -u postgres psql <<EOF
-CREATE ROLE maki WITH LOGIN PASSWORD 'StrongDbPassword2026!';
-CREATE DATABASE maki_math OWNER maki;
-EOF
-
-# Enable extensions and import schema
-sudo -u postgres psql -d maki_math -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
-PGPASSWORD='StrongDbPassword2026!' psql -h 127.0.0.1 -U maki -d maki_math -f maki-math-backend/Database/schema.sql
-```
-
-> [!IMPORTANT] Initial Default Administrator Account
-> Database initialization sets up a default root user:
-> - Username: `makimath_root`
-> - Initial Password: `makimath_root`
-> 
-> **You must log in and change this password immediately after first launch!**
-
-### 2. Setup & Start Backend
-```bash
-cd /var/www/maki-math/backend
-npm install --omit=dev
-
-# Write production environment (.env)
-cat > .env <<EOF
-HOST=127.0.0.1
-PORT=3000
-PGHOST=127.0.0.1
-PGPORT=5432
-PGUSER=maki
-PGPASSWORD=StrongDbPassword2026!
-PGDATABASE=maki_math
-JWT_SECRET=$(openssl rand -hex 32)
-PAYLOAD_SECRET_KEY=$(openssl rand -hex 16)
-TRUST_PROXY=loopback
-LOG_LEVEL=info
-EOF
-chmod 600 .env
-
-# Manage daemon with PM2
-npm install -g pm2
-pm2 start npm --name "maki-math-backend" -- start
-pm2 save
-pm2 startup
-```
-
-### 3. Build & Deploy Frontend
-```bash
-cd /path/to/maki-math-frontend
-pnpm install
-pnpm build
-
-# Copy build artifacts to web root
-sudo mkdir -p /var/www/maki-math/frontend
-sudo cp -r dist/* /var/www/maki-math/frontend/
-```
-
-### 4. Configure Nginx
-Refer to the [Nginx Reverse Proxy Guide](./nginx.md) for SSL and proxy configuration.
-
-## Maintenance & Telemetry
-
-### 1. Health Probe
-```bash
-curl -fsS http://127.0.0.1:3000/health
-```
-Returns database connectivity status, connection pool latency, and uptime in seconds.
-
-### 2. View Backend Logs
-```bash
-pm2 logs maki-math-backend --lines 100
-```
+VitePress base is / for a custom-domain root. Output is Documents/.vitepress/dist. Pages runs on main pushes or workflow_dispatch, not ordinary branch pushes. Confirm Pages domain/DNS separately.

@@ -1,37 +1,44 @@
-# 认证与会话
+# 账号与会话 API
 
-依据及加密方式见[接口约定](./overview.md)。字段未标可选的均必填，拒绝未知字段。
+本页遵循[通信约定](./overview.md)。Body 未标可选的字段均必填，GET 没有请求体。
 
-Body 表示 JSON 请求体，Query 表示查询参数；未标“可选”的请求字段均必填。成功响应列说明 HTTP 状态和解密后的数据，完整字段见下文。
-
-| 路径 | 方法 | 接口说明 | 权限 | 请求参数 | 成功响应 |
+| 路径 | 方法 | 操作 | 权限 | 请求参数 | 成功响应 |
 | --- | --- | --- | --- | --- | --- |
-| `/api/auth/pubkey` | `GET` | 获取通信公钥 | 无需认证 | 无请求体 | `200`：明文 `{ ok, pubkey }` |
-| `/api/auth/register` | `POST` | 注册账号 | 公开，需有效邀请码 | Body：`username`, `password`, `invite_code`；可选 `display_name` | `201`：`{ user }`，不创建会话 |
-| `/api/auth/login` | `POST` | 登录并创建会话 | 无需认证 | Body：`username`, `password` | `200`：`{ user, access_token, refresh_token }` |
-| `/api/auth/refresh` | `POST` | 刷新访问令牌并轮换刷新令牌 | 有效刷新令牌 | Body：`refresh_token` | `200`：`{ user, access_token, refresh_token }` |
-| `/api/auth/me` | `GET` | 获取当前用户 | 已登录用户 | 无请求体 | `200`：`{ user }` |
-| `/api/auth/profile` | `PATCH` | 更新个人资料 | 已登录用户 | Body：`display_name` | `200`：`{ user }` |
-| `/api/auth/logout` | `POST` | 注销匹配的会话 | 已登录用户 | Body：`refresh_token` | `204`：无响应体 |
-| `/api/auth/password` | `PATCH` | 修改密码并撤销全部会话 | 已登录用户 | Body：`old_password`, `new_password` | `204`：无响应体；撤销全部会话 |
+| `/api/auth/pubkey` | GET | 通信公钥 | 公开 | 无 | 200，明文 `{ ok, pubkey }` |
+| `/api/auth/register` | POST | 注册 | 有效邀请码 | Body：username、password、invite_code；display_name 可选 | 201，`{ user }` |
+| `/api/auth/login` | POST | 登录 | 公开 | Body：username、password | 200，`{ user, access_token, refresh_token }` |
+| `/api/auth/refresh` | POST | 轮换令牌 | 有效刷新令牌 | Body：refresh_token | 200，同登录结构 |
+| `/api/auth/me` | GET | 当前用户 | 登录 | 无 | 200，`{ user }` |
+| `/api/auth/profile` | PATCH | 修改昵称 | 登录 | Body：display_name | 200，`{ user }` |
+| `/api/auth/logout` | POST | 撤销匹配会话 | 登录 | Body：refresh_token | 204，无正文 |
+| `/api/auth/password` | PATCH | 改密并撤销全部会话 | 登录 | Body：old_password、new_password | 204，无正文 |
 
-注册后必须单独登录。username 最长 80；invite_code 最长 100；display_name 最长 100，可空。注册密码和新密码至少 8 字符、至多 200 字符且 UTF-8 不超过 72 字节。登录密码/旧密码非空、最长 200。refresh_token 非空、最长 200。
+注册只创建账号，不创建登录会话；之后单独调用 login。通常 user 为 `{ id, username, display_name, role }`，profile 返回的 user 还带 status。role 为 editor 或 super_admin，不能从注册体指定。
 
-注册、登录、刷新和 me 的 user 为 `{ id, username, display_name, role }`，profile 更新的 user 另带 status。角色为 editor 或 super_admin，不允许客户端指定角色、所有者或会话 ID。
+| Body 字段 | 类型 | 约束 |
+| --- | --- | --- |
+| username | string | 非空，最长 80 |
+| password / new_password | string | 注册和改密至少 8 字符，最长 200，UTF-8 最多 72 字节；登录 password 仅要求非空、最长 200 |
+| old_password | string | 非空，最长 200 |
+| invite_code | string | 非空，最长 100 |
+| display_name | string | 可空，最长 100；只在注册时可省略 |
+| refresh_token | string | 非空，最长 200 |
 
-默认访问令牌有效期 2h、刷新会话 7d，可配置。刷新轮换 refresh_token，应同时替换两种令牌，串行处理同一会话刷新。旧刷新令牌失效；刷新复用会话 ID，该会话未过期的旧访问令牌仍可能有效。
+## 令牌怎么处理
 
-注销按“当前用户 + 所提交刷新令牌哈希”删除会话。不匹配或已轮换的旧令牌也返回 204，**204 不证明 Bearer 对应会话已撤销**。前端应提交最新 refresh_token，成功后清理两种令牌及用户状态。改密成功删除该用户全部会话，需重新登录。停用账号也删除其会话；JWT 尚未过期不能绕过会话检查。
+刷新会轮换 refresh_token，应串行刷新并一起替换两种令牌。默认访问令牌有效期 2h、刷新会话 7d，可配置；刷新复用原会话 ID，未过期的旧访问令牌仍可能有效。
 
-## 示例（静态核对，未做数据库联调）
+注销按“当前用户 + 所提交刷新令牌哈希”删除会话。提交已轮换或不匹配的令牌也会返回 204，所以 204 不证明 Bearer 所属会话已经撤销。前端应提交最新 refresh_token，随后清理本地令牌及用户状态。改密成功则撤销这个账号的全部会话，需要重新登录。账号被停用也会撤销会话。
 
-POST /auth/login：
+## 请求示例
+
+POST `/api/auth/login` 的加密前数据：
 
 ```json
 { "username": "editor-demo", "password": "example-pass-2026" }
 ```
 
-解密后的响应（尖括号内容替换为真实运行时值）：
+响应结构示例，令牌为占位值：
 
 ```json
 {
@@ -41,30 +48,4 @@ POST /auth/login：
 }
 ```
 
-刷新或注销请求体如下，注销另需 Bearer：
-
-```json
-{ "refresh_token": "<最新 refresh_token>" }
-```
-
-PATCH /auth/password：
-
-```json
-{ "old_password": "example-pass-2026", "new_password": "example-new-pass-2026" }
-```
-
-主要错误：字段/无效邀请码 400；重复用户名 409；登录失败、无效刷新会话、旧密码错误 401。注销和改密成功不返回 `{ ok: true }`，不能解析空 JSON。
-
-## 请求参数定义
-
-下表补充接口索引中的请求体字段。同名字段只用于索引列出的接口。
-
-| 参数 | 位置 | 类型 | 必填 | 约束 |
-| --- | --- | --- | --- | --- |
-| `username` | Body | string | 是 | 非空，最长 80 字符 |
-| `password` | Body | string | 是 | 注册至少 8 字符且不超过 72 UTF-8 字节；登录最长 200 字符 |
-| `invite_code` | Body | string | 是 | 注册使用，非空，最长 100 字符 |
-| `display_name` | Body | string | 注册否；更新资料是 | 可为空，最长 100 字符 |
-| `refresh_token` | Body | string | 是 | 刷新和注销使用，非空，最长 200 字符 |
-| `old_password` | Body | string | 是 | 修改密码使用，非空，最长 200 字符 |
-| `new_password` | Body | string | 是 | 至少 8 字符，最长 200 字符且不超过 72 UTF-8 字节 |
+无效邀请码或参数返回 400，用户名冲突返回 409；登录失败、失效刷新会话或旧密码错误返回 401。不要把所有 401 都当成可以自动刷新后重试的请求，例如旧密码不正确需要用户改输入。

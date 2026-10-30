@@ -1,223 +1,63 @@
 import { defineConfig } from 'vitepress'
 
+const pages = [
+  ['guide/reading', '阅读与掌握记录', 'Reading & mastery'],
+  ['authoring/workbench', '讲义工作台', 'Lecture workbench'],
+  ['authoring/typst-guide', 'Typst 与 MM 宏', 'Typst & MM macros'],
+  ['authoring/import-export', '导入与导出', 'Import & export'],
+  ['guide/admin', '平台管理与审核', 'Administration & review'],
+  ['guide/development', '开发与架构', 'Development & architecture'],
+  ['deploy/self-host', '部署与升级', 'Deployment & upgrades'],
+  ['api/overview', '接口约定', 'API conventions'],
+  ['api/auth', '认证与会话', 'Authentication & sessions'],
+  ['api/knowledge', '知识点 API', 'Knowledge API'],
+  ['api/lectures', '讲义 API', 'Lecture API'],
+  ['api/review', '审核与管理 API', 'Review & management API']
+]
+
+function navigation(english) {
+  const prefix = english ? '/en/' : '/'
+  return pages.map(([path, zh, en]) => ({ text: english ? en : zh, link: prefix + path }))
+}
+
 export default defineConfig({
   base: '/',
   title: 'MakiMath',
-  description: 'Structured Mathematics Learning Platform',
-
+  description: 'MakiMath documentation',
   locales: {
     root: {
       label: '简体中文',
       lang: 'zh-CN',
-      title: 'MakiMath',
-      description: '结构化数学讲义与学习平台',
+      description: 'MakiMath 使用、开发与接口文档',
       themeConfig: {
         nav: [
-          { text: '指南', link: '/guide/getting-started' },
-          { text: '讲义编写', link: '/authoring/workflow' },
-          { text: '技术架构', link: '/architecture/overview' },
-          { text: 'API 接口', link: '/api/overview' },
-          { text: '部署运维', link: '/deploy/self-host' },
-          { text: '社区贡献', link: '/contributing/guide' }
+          { text: '阅读', link: '/guide/reading' },
+          { text: '编写', link: '/authoring/workbench' },
+          { text: '管理', link: '/guide/admin' },
+          { text: '开发与部署', link: '/guide/development' },
+          { text: 'API', link: '/api/overview' }
         ],
-        sidebar: {
-          '/guide/': [
-            {
-              text: '基础认知',
-              items: [
-                { text: '快速上手总览', link: '/guide/getting-started' },
-                { text: '项目概述', link: '/guide/overview' },
-                { text: '更新日志', link: '/guide/update-log' }
-              ]
-            },
-            {
-              text: '面向开发者',
-              items: [
-                { text: '全栈开发快速上手', link: '/guide/dev-getting-started' }
-              ]
-            },
-            {
-              text: '面向编者',
-              items: [
-                { text: '编者入驻与快速上手', link: '/guide/editor-getting-started' }
-              ]
-            }
-          ],
-          '/authoring/': [
-            {
-              text: '讲义创作',
-              items: [
-                { text: '知识点维护与讲义编排', link: '/authoring/workflow' },
-                { text: 'Typst 语法与 MM 宏', link: '/authoring/typst-guide' },
-                { text: '知识点引用与掌握', link: '/authoring/knowledge-reference' },
-                { text: '编者工作台指南', link: '/authoring/workbench' },
-                { text: '讲义JSON与小节导入', link: '/authoring/import-export' }
-              ]
-            }
-          ],
-          '/architecture/': [
-            {
-              text: '系统架构',
-              items: [
-                { text: '系统架构总览', link: '/architecture/overview' },
-                { text: '前端接入边界', link: '/architecture/frontend' },
-                { text: '后端架构 (Fastify + PG)', link: '/architecture/backend' },
-                { text: '通信安全与数据保护', link: '/architecture/security' }
-              ]
-            }
-          ],
-          '/api/': [
-            {
-              text: 'API 接口参考',
-              items: [
-                { text: '接口概览与约定', link: '/api/overview' },
-                { text: '认证与会话 API', link: '/api/auth' },
-                { text: '知识点 API', link: '/api/knowledge' },
-                { text: '讲义 API', link: '/api/lectures' },
-                { text: '审核与管理 API', link: '/api/review' },
-                { text: '前端接入流程', link: '/api/frontend-integration' }
-              ]
-            }
-          ],
-          '/deploy/': [
-            {
-              text: '部署运维',
-              items: [
-                { text: '私有化部署指南', link: '/deploy/self-host' },
-                { text: '既有数据库手工升级', link: '/deploy/database-upgrade' },
-                { text: '环境变量参考', link: '/deploy/environment' },
-                { text: 'Nginx 反向代理配置', link: '/deploy/nginx' }
-              ]
-            }
-          ],
-          '/contributing/': [
-            {
-              text: '开源社区',
-              items: [
-                { text: '贡献指南', link: '/contributing/guide' },
-                { text: 'Git Commit 提交规范', link: '/contributing/git-rules' }
-              ]
-            }
-          ]
-        },
-        docFooter: {
-          prev: '上一篇',
-          next: '下一篇'
-        },
-        outline: {
-          label: '本页大纲'
-        }
+        sidebar: navigation(false),
+        docFooter: { prev: '上一篇', next: '下一篇' },
+        outline: { label: '本页大纲' }
       }
     },
     en: {
       label: 'English',
       lang: 'en-US',
       link: '/en/',
-      title: 'MakiMath',
-      description: 'Structured Mathematics Learning Platform',
       themeConfig: {
         nav: [
-          { text: 'Guide', link: '/en/guide/getting-started' },
-          { text: 'Authoring', link: '/en/authoring/workflow' },
-          { text: 'Architecture', link: '/en/architecture/overview' },
-          { text: 'API', link: '/en/api/overview' },
-          { text: 'Deploy', link: '/en/deploy/self-host' },
-                { text: 'Manual Database Upgrades', link: '/en/deploy/database-upgrade' },
-          { text: 'Contributing', link: '/en/contributing/guide' }
+          { text: 'Reading', link: '/en/guide/reading' },
+          { text: 'Authoring', link: '/en/authoring/workbench' },
+          { text: 'Administration', link: '/en/guide/admin' },
+          { text: 'Development & deployment', link: '/en/guide/development' },
+          { text: 'API', link: '/en/api/overview' }
         ],
-        sidebar: {
-          '/en/guide/': [
-            {
-              text: 'Overview',
-              items: [
-                { text: 'Quickstart Overview', link: '/en/guide/getting-started' },
-                { text: 'Project Overview', link: '/en/guide/overview' },
-                { text: 'Update Log', link: '/en/guide/update-log' }
-              ]
-            },
-            {
-              text: 'For Developers',
-              items: [
-                { text: 'Developer Quickstart', link: '/en/guide/dev-getting-started' }
-              ]
-            },
-            {
-              text: 'For Editors',
-              items: [
-                { text: 'Editor Quickstart', link: '/en/guide/editor-getting-started' }
-              ]
-            }
-          ],
-          '/en/authoring/': [
-            {
-              text: 'Content Authoring',
-              items: [
-                { text: 'Knowledge & Lecture Authoring', link: '/en/authoring/workflow' },
-                { text: 'Typst Math Guide', link: '/en/authoring/typst-guide' },
-                { text: 'Knowledge References & Mastery', link: '/en/authoring/knowledge-reference' },
-                { text: 'Editor Workbench', link: '/en/authoring/workbench' },
-                { text: 'Lecture JSON & Section Imports', link: '/en/authoring/import-export' }
-              ]
-            }
-          ],
-          '/en/architecture/': [
-            {
-              text: 'Architecture',
-              items: [
-                { text: 'System Overview', link: '/en/architecture/overview' },
-                { text: 'Frontend (Vue 3 + WASM)', link: '/en/architecture/frontend' },
-                { text: 'Backend (Fastify + PG)', link: '/en/architecture/backend' },
-                { text: 'Communication & Data Security', link: '/en/architecture/security' }
-              ]
-            }
-          ],
-          '/en/api/': [
-            {
-              text: 'API Reference',
-              items: [
-                { text: 'Overview & Conventions', link: '/en/api/overview' },
-                { text: 'Auth & Session API', link: '/en/api/auth' },
-                { text: 'Knowledge API', link: '/en/api/knowledge' },
-                { text: 'Lecture API', link: '/en/api/lectures' },
-                { text: 'Review & Management', link: '/en/api/review' },
-                { text: 'Frontend Integration', link: '/en/api/frontend-integration' }
-              ]
-            }
-          ],
-          '/en/deploy/': [
-            {
-              text: 'Deployment & Ops',
-              items: [
-                { text: 'Self-Hosting Guide', link: '/en/deploy/self-host' },
-                { text: 'Environment Variables', link: '/en/deploy/environment' },
-                { text: 'Nginx Setup', link: '/en/deploy/nginx' }
-              ]
-            }
-          ],
-          '/en/contributing/': [
-            {
-              text: 'Community',
-              items: [
-                { text: 'Contributing Guide', link: '/en/contributing/guide' },
-                { text: 'Git Commit Rules', link: '/en/contributing/git-rules' }
-              ]
-            }
-          ]
-        },
-        docFooter: {
-          prev: 'Previous page',
-          next: 'Next page'
-        },
-        outline: {
-          label: 'On this page'
-        }
+        sidebar: navigation(true),
+        docFooter: { prev: 'Previous page', next: 'Next page' },
+        outline: { label: 'On this page' }
       }
     }
-  },
-
-  themeConfig: {
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/new-maki-math' }
-    ]
   }
 })

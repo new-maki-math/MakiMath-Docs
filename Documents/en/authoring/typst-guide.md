@@ -1,51 +1,47 @@
-# Typst syntax and MM macros
+# Typst and MM macros
 
-The browser uses Typlet to parse Typst syntax and maps supported document nodes to web components. Typlet renders math. This is **not a complete Typst compiler**. The backend stores and returns source text without parsing macros or building a document AST. Examples were checked against source code; no rendering tests were run in this documentation round.
+Write text, headings and formulas directly. The browser parses supported Typst syntax into web components; this is not a complete Typst compiler. The backend stores and returns source without compiling, executing macros or checking reference targets.
 
-Consult the official [math](https://typst.app/docs/reference/math/), [text](https://typst.app/docs/reference/text/text/) and [table](https://typst.app/docs/reference/model/table/) references for language syntax. Their full feature sets are not the site's support promise.
-
-## Supported subset
-
-| Area | Current scope |
-| --- | --- |
-| Markup | Text, paragraphs, headings, line breaks, comments, escapes, emphasis, unordered/ordered/term lists |
-| Math | Inline `$x^2$` and display `$ x^2 $`; actual support depends on Typlet, with source and diagnostics on failure |
-| Text | Static supported `text` arguments and `set text`; strong, emph, underline, strike, overline, sub, super, smallcaps, hide; raw string with optional block boolean |
-| Links and highlight | Static http/https/mailto links and optional body; highlight with optional static fill |
-| Layout | Static h/v spacing, parameterless linebreak/parbreak, left/center/right align; box with inset/radius/stroke/fill, block without extra layout parameters |
-| Tables | Static columns, initial single header, cells with spans/positions/styles, explicit hline/vline positions |
-
-Supported static text properties include size, color, font names/arrays, weight/style, tracking/stretch, lang/region, direction, kerning, hyphenation, ligatures, numeric styles, features and variations. Region requires lang. Font availability and OpenType behavior depend on browser/fonts. Variables, computed values and conditional rules are not supported substitutes.
-
-Tables accept 1–1000 static columns or supported static length/auto widths, with up to 20000 occupied grid slots. Lines cannot cut through merged cells, and automatic hline/vline positions are not supported. Unsupported syntax remains visible with line/column diagnostics. Arbitrary let, functions, loops, conditions, import/include/packages, show rules, page settings and file operations are outside this renderer's supported execution model. Legacy course adapters and defbox/thmbox/zt/makitag are no longer used.
-
-## The 13 MM macros
-
-These are site extensions. Content blocks `[text]` and strings `"text"` are not interchangeable.
-
-| Macro | Call | Parameters |
-| --- | --- | --- |
-| mm-box-definition | `#mm-box-definition[body]` | Definition, blue |
-| mm-box-theorem | `#mm-box-theorem[body]` | Theorem/formula, purple |
-| mm-box-example | `#mm-box-example[body]` | Example, cyan |
-| mm-box-warn | `#mm-box-warn[body]` | Warning, amber |
-| mm-box-conclusion | `#mm-box-conclusion[body]` | Conclusion/corollary, green |
-| mm-box-frequency | `#mm-box-frequency[body]` | Exam frequency, orange |
-| mm-box-homework | `#mm-box-homework[body]` | Homework, teal |
-| mm-tag | `#mm-tag(color: "blue")[tag]` | One inline body; optional color defaults to blue |
-| mm-question | `#mm-question(source: "exam", title: [title], difficulty: 3, id: "q-1")[body]` | All named arguments and the single body are optional; difficulty is integer 1–5; source/id strings; title inline content |
-| mm-question-options | `#mm-question-options(columns: 2, [first], [second])` | At least one content block; optional columns 1, 2 or 4; automatic A/B labels |
-| mm-question-blank | `#mm-question-blank(width: 4em)` | No body; optional supported static nonnegative length, default 4em |
-| mm-knowledge | `#mm-knowledge(slug: "sequence-limit")` | Exactly one static slug string; current active knowledge |
-| mm-test | `#mm-test` | Bare identifier, no parentheses or parameters; renders MM TEST |
-
-All seven box macros require exactly one body and only allow the optional `title: [inline content]` argument. A string title or arbitrary color parameter is not accepted. Tag presets are blue/cyan/green/orange/rose/purple, or a supported static rgb/color.rgb value. Unsupported tag color falls back to blue with a diagnostic. Block content is not accepted inside tags or supplementary titles.
+## A first passage
 
 ```typst
-#mm-box-definition(title: [Sequence limit])[
-  Let the sequence be $a_n$.
+= Sequence limits
+Let the sequence be $a_n$.
+
+#mm-box-definition(title: [Convergence])[
+  Write the definition and formulas such as $ epsilon > 0 $ here.
 ]
-#mm-tag(color: rgb("B22234"))[Important]
+#mm-box-custom(title: [Think about it])[
+  Can you give an example?
+]
+```
+
+Text, paragraphs, headings, emphasis, ordered/unordered/term lists, raw text and formulas have mappings. `$x^2$` is inline and `$ x^2 $` is display math. Consult the [Typst math reference](https://typst.app/docs/reference/math/) for syntax, but actual rendering still depends on Typlet and preview diagnostics.
+
+Some static text/set-text parameters, links, highlights, alignment, spacing, boxes, blocks and tables are supported. Arbitrary variables, function definitions, loops, import/include, packages, show rules and page layout are not executed. Unsupported fragments remain visible with line/column diagnostics.
+
+## Boxes and tags
+
+There are **14 MM macros**. All eight boxes take one content body and only the optional `title: [supplementary title]` parameter. A string title or an extra color argument is not accepted.
+
+| Macro | Heading |
+| --- | --- |
+| `mm-box-definition` | Definition |
+| `mm-box-theorem` | Theorem / formula |
+| `mm-box-example` | Example |
+| `mm-box-warn` | Warning / common mistake |
+| `mm-box-conclusion` | Conclusion / corollary |
+| `mm-box-frequency` | Exam frequency |
+| `mm-box-homework` | Homework |
+| `mm-box-custom` | Custom; no heading bar when title is absent or empty |
+
+Titles accept inline text, math and tags, not tables, display math or nested boxes. The legacy defbox/thmbox/zt/makitag adapters are no longer used.
+
+Write a tag as `#mm-tag(color: "blue")[Important]`. Color is optional, default blue; presets are blue/cyan/green/orange/rose/purple. Static rgb such as `rgb("B22234")` also works. Unsupported colors warn and fall back to blue. Tag content must stay inline.
+
+## Questions, options and blanks
+
+```typst
 #mm-question(source: "Practice", title: [Choose], difficulty: 2, id: "limit-01")[
   Select a conclusion.
   #mm-question-options(columns: 2, [$a_n$ converges], [$a_n$ diverges])
@@ -53,6 +49,28 @@ All seven box macros require exactly one body and only allow the optional `title
 ]
 ```
 
-Option columns collapse on narrow containers. These macros do not provide answer submission, grading or question-bank records. See [knowledge references](./knowledge-reference.md) for source conventions and local mastery.
+| Macro | Parameters |
+| --- | --- |
+| `mm-question` | Optional source/id strings, inline title block, integer difficulty 1–5, and at most one optional body |
+| `mm-question-options` | At least one content block; optional columns 1/2/4; automatic A/B labels; columns reduce on narrow screens |
+| `mm-question-blank` | No body; optional supported nonnegative static width, default 4em |
 
-Static lengths currently accept unitless0 or nonnegative pt/mm/cm/in/em/% literals; tracking additionally supports negatives. fr and computed lengths are not supported.
+These are display features, not answer submission or grading. The bare `#mm-test` macro has no parentheses and displays MM TEST.
+
+## Public knowledge references
+
+```typst
+#mm-knowledge(slug: "sequence-limit")
+```
+
+This macro takes exactly one valid static slug string. In a lecture section, typing #mm-knowledge or its opening parenthesis triggers search at supported positions. Selection inserts the complete syntax. Comments, strings and raw text do not auto-trigger; editor changes during selection require choosing the insertion position again.
+
+Knowledge details offer code copying and “Add to my lecture”. Choose an existing local lecture or editable online draft, then a chapter and section. The reference is appended to that section and saved. Missing chapters/sections are not created for you, and public knowledge is not modified.
+
+References resolve current active knowledge. Archived/deleted points show a placeholder; other failures offer retry. Nested references inside knowledge do not expand. Repeated source references are allowed and have no server-generated occurrence ID or target validation on save.
+
+## Fine-layout limits
+
+Static lengths accept 0 or nonnegative pt/mm/cm/in/em/% literals; tracking also allows negative lengths. fr and computed lengths are unsupported. Text maps supported font/weight/color/language/direction and some OpenType arguments, with results dependent on browser/font availability.
+
+Tables support static column counts/width arrays, a single initial header, spanning cells and explicit lines. Limits are 1000 columns and 20000 grid positions. Lines cannot cross merged-cell interiors; automatically positioned hline/vline are unsupported. Simplify parameters when diagnostics appear rather than assuming a complete official Typst project can execute here.

@@ -1,28 +1,15 @@
----
-layout: home
+# MakiMath documentation
 
-hero:
-  name: "MakiMath"
-  text: "Structured Mathematics Learning Platform"
-  tagline: Open-source mathematics infrastructure powered by DAG knowledge graphs and modern Typst typesetting
-  actions:
-    - theme: brand
-      text: Getting Started
-      link: /en/guide/getting-started
-    - theme: alt
-      text: Architecture
-      link: /en/architecture/overview
+Start with [reading and your shelf](./guide/reading.md), or [create a lecture](./authoring/workbench.md). Local authoring works without an account.
 
-features:
-  - title: Structured DAG Graphs
-    details: Public knowledge points have independent prerequisite relations; lectures organize complete source by chapter and section.
-  - title: Modern Typst Typesetting
-    details: Current knowledge and lecture sections store Typst source; the frontend renders its supported subset and MM extensions.
-  - title: Modern Full-Stack Design
-    details: Vue frontend, Fastify backend, and PostgreSQL; the Chinese API reference now follows the knowledge and lecture model.
----
+| Task | Guide |
+| --- | --- |
+| Find knowledge, follow prerequisites, record mastery | [Reading and your shelf](./guide/reading.md) |
+| Write source, formulas and knowledge references | [Typst and MM macros](./authoring/typst-guide.md) |
+| Move lectures between browsers or import section files | [Import and export](./authoring/import-export.md) |
+| Maintain knowledge, review lectures, manage accounts | [Administration](./guide/admin.md) |
+| Work on the projects locally | [Local development](./guide/development.md) |
+| Deploy or update an existing database | [Deployment and upgrades](./deploy/self-host.md) |
+| Connect a client | [API conventions](./api/overview.md) |
 
-
-::: info Current documentation
-See the [integration contract](/en/api/frontend-integration) for frontend64cc122 and backendea63e51. This update was statically reviewed, without running builds or tests.
-:::
+These pages describe **v1.1.0-beta**, frontend `e3a2aa1` and backend `62ad91f`. This rewrite used static source inspection; no project, build or tests were run.

@@ -1,19 +1,35 @@
-# Authoring workbench
+# Create and maintain a lecture
 
-/lecture-workbench (legacy /workbench redirects) groups local lectures, online lectures and archives. Private trees show the working draft and read-only review snapshots. Guests may create/import/edit browser-local lectures; online editing requires login and owner/admin/edit-collaborator permission. /knowledge-workbench is administrator-only and directly edits current knowledge, with no knowledge review submission.
+Open `/lecture-workbench`. Guests can author local lectures; online authoring requires invitation registration followed by a separate login.
 
-Chapter/section metadata and source can be edited, added, removed and reordered. Preview supports only the documented Typst/MM subset. Optional synchronized scrolling is off by default. Unsaved navigation prompts for save/discard; online409 conflicts require preserving input and reloading.
+## Create the lecture and directory
 
-Save first, then submit after UI confirmation and a5-second wait. Submission creates a separate pending snapshot, leaving the working draft editable. Only one pending snapshot per lecture is allowed. Approval publishes the snapshot and changes the working draft concurrency version; visible-page refresh preserves unsaved edits and warns on conflict.
+Create a lecture in the local or your online group. Enter a title and slug using lowercase letters, digits and separating hyphens, such as `limits-intro`. Local slugs are unique in this browser; online slugs are unique on the server. The online interface cannot rename a lecture slug. Renaming a local slug changes its local URL.
 
-Online routes are /lecture/online/{slug} and /doc/{sectionId}, with optional revision_id query. Local routes use /lecture/local/{slug} and browser storage. Downloading requires a unique local slug; editing a download does not overwrite online content.
+Add chapters and sections, fill their titles/slugs and write [Typst/MM source](./typst-guide.md). Preview and diagnostics appear beside the editor. Scroll synchronization is optional and off by default. A rendered preview is not a saved revision: use Save or Ctrl/Cmd+S after editing.
 
-## Archive, restore and delete
+Leaving unsaved work prompts for a decision. On an online version conflict, preserve your input before reloading. Reload is not a merge operation.
 
-Owners/admins archive through three steps: intent, lecture-name check, impact/final confirmation. Handle unsaved changes first. Archiving retains all versions/content, removes recommendation and moves the lecture to archives. Authorized reading remains available; editing, submission, review, version copying, export, collaborator changes and normal publication updates are blocked.
+## Covers
 
-Owner/admin restoration returns withdrawn if a public pointer exists, otherwise unpublished, with recommendation false. Restoration never automatically republishes.
+Lecture properties accept JPG, PNG and WebP. Local covers allow up to 5 MiB and require saving the lecture afterward. Online covers allow up to 512 KiB; changing/removing one saves immediately through a separate request and changes the draft version. Save or discard other online edits before changing a cover.
 
-Administrators may permanently delete an archived lecture through a separate three-step confirmation of intent, name/scope and irreversibility. This removes its identity, draft, all snapshots, directory, reviews and collaborators, not public knowledge or browser data. The backend independently checks admin permission and archived state; three UI steps do not mean three API calls. Local deletion only removes the browser copy. Check lists before retrying uncertain remote results.
+Covers belong to versions. Submission copies the draft cover into its review snapshot; a later draft-cover change does not replace the current public snapshot. Lists load covers on demand and offer retry on failure.
 
-Portable JSON exchanges one version; chapter batch import appends.typ sections and requires saving afterward. See [import/export](./import-export.md).
+## Save, submit and publish
+
+Save updates the working draft. Submission copies persisted content into a separate review snapshot and leaves the draft editable. Each lecture permits one pending snapshot at a time. The UI asks for confirmation and has a short wait before submission.
+
+Approval publishes the reviewed snapshot, not later edits to the draft. It also changes the source draft's concurrency version; check update/conflict messages when returning to the editor. Rejection leaves any current public version unchanged.
+
+A snapshot freezes the directory, author source and reference macro strings. It does not include copied public knowledge bodies, which may change on later reads. Recommendation is a separate admin action.
+
+## Archive and restore
+
+An owner or admin may archive an online lecture through three steps: intent, lecture-name check and impact confirmation. Handle unsaved work first. Archiving retains versions/content but removes public availability and recommendation.
+
+Authorized private reading remains available. Editing, submission, review, export, version copying and collaborator changes are blocked. Owner/admin restoration returns withdrawn when a public revision exists, otherwise unpublished; it never republishes automatically.
+
+Admins can separately permanently delete an archived lecture through another three-step confirmation. It removes the identity, drafts, snapshots, directory, covers, reviews and collaborators. Restore cannot recover it. Public knowledge and browser copies are unaffected. Editors cannot perform this deletion. Deleting a local lecture only affects its browser copy.
+
+See [import/export](./import-export.md) for files and [administration](../guide/admin.md) for platform operations.

@@ -1,78 +1,77 @@
-# Typst 语法与 MM 宏
+# Typst 与 MM 宏
 
-MakiMath 在浏览器中用 Typlet 解析 Typst 语法，把已适配的正文节点映射为网页组件，数学公式由 Typlet 渲染。**这不是完整 Typst 编译器**：官方支持的语法或函数，不代表本站已经适配。后端只保存、返回源码，不解析宏、不生成正文 AST，也不执行 Typst。
+直接写正文、标题和公式即可。平台在浏览器中解析已适配的 Typst 语法，再映射成网页组件；它不是完整 Typst 编译器。后端只保存和返回源码，不编译、不执行宏，也不替你验证引用目标。
 
-可查阅 [Typst 数学参考](https://typst.app/docs/reference/math/)、[text 参数](https://typst.app/docs/reference/text/text/)及[table 参数](https://typst.app/docs/reference/model/table/)。这些是语言参考；本站支持范围以本页和前端诊断为准。以下示例按当前解析代码静态核对，本轮未执行渲染测试。
-
-## 已适配的正文语法
-
-| 内容 | 当前可用形式与边界 |
-| --- | --- |
-| 正文与标题 | 普通文本、段落、`= 标题`、`== 二级标题`、换行、注释、转义；网页标题标签最高 h6 |
-| 强调与列表 | `*粗体*`、`_强调_`、无序/有序/术语列表；不是印刷版分页排版 |
-| 公式 | `$x^2$` 行内；`$ x^2 $` 独立公式；实际公式能力取决于 Typlet，异常显示原片段和诊断 |
-| 文本函数 | `text` 的已适配静态参数；`strong/emph/underline/strike/overline/sub/super/smallcaps/hide` 正文形式；`raw` 的静态字符串及可选 `block` 布尔参数 |
-| 链接与高亮 | `link` 的静态 http/https/mailto 地址与可选正文；`highlight` 可选静态 `fill`；不支持任意脚本地址 |
-| 间距与对齐 | 无参数 `linebreak()/parbreak()`；单个静态长度的 `h()/v()`；`align(left/center/right)[正文]` |
-| 容器 | `box` 支持静态 `inset/radius/stroke/fill`；`block[正文]` 无额外布局参数 |
-| 表格 | `table`、开头单次 `table.header`、`table.cell`、显式位置的 `table.hline/vline`，见下文 |
-
-`text` / `#set text(...)` 支持静态字号、颜色、字体名称/数组、字重、字形、tracking、stretch、lang/region、dir、kerning、hyphenate、连字、数字样式、features 和 variations 的已适配值。不能使用变量、计算表达式或条件规则代替静态值；region 需要同时有 lang。字体是否可用、OpenType 特性是否生效仍取决于浏览器与字体。`#set text(...)` 作用于当前解析内容范围后续节点，不等同于完整 Typst 样式系统。
-
-表格列数为 1–1000 的静态整数，或由支持的静态长度、`auto` 构成的列宽数组。适配 `align/inset/fill/stroke`，部分可用列样式数组；cell 可用正整数 colspan/rowspan、静态 x/y 和已适配样式。占位网格最多 20000 格，线条不能穿过被合并单元格的内部，不支持自动定位 hline/vline。不能据此推断所有官方 table 参数均可用。
+## 从一段正文开始
 
 ```typst
-= 极限
+= 数列极限
 设数列为 $a_n$。
 
-#text(weight: "bold", fill: rgb("1f5aa0"))[关注定义中的量词。]
-
-#table(columns: 2,
-  table.header([符号], [含义]),
-  [$a_n$], [数列的第 $n$ 项],
-)
-```
-
-未适配的语法保留原片段并给出带行列号的诊断，语法错误或参数不符可能只影响该片段。当前不提供任意 `let`、函数定义、循环、条件、`import/include`、包加载、`show`、页面设置、文件读写或完整布局执行能力。旧 `defbox/thmbox/zt/makitag` 及课程适配器不在当前渲染链路中，需改用下列宏。
-
-## 13 个 MM 宏
-
-MM 宏是站点扩展，不是 Typst 官方函数。`[正文]` 表示内容块，`"文字"` 表示字符串，参数类型不能互换。
-
-| 宏 | 用法 | 参数与边界 |
-| --- | --- | --- |
-| `mm-box-definition` | `#mm-box-definition[正文]` | 定义框；蓝色 |
-| `mm-box-theorem` | `#mm-box-theorem[正文]` | 定理/公式框；紫色 |
-| `mm-box-example` | `#mm-box-example[正文]` | 例题框；青色 |
-| `mm-box-warn` | `#mm-box-warn[正文]` | 提醒/易错框；琥珀色 |
-| `mm-box-conclusion` | `#mm-box-conclusion[正文]` | 结论/推论框；绿色 |
-| `mm-box-frequency` | `#mm-box-frequency[正文]` | 真题考频框；橙色 |
-| `mm-box-homework` | `#mm-box-homework[正文]` | 作业框；青绿色 |
-| `mm-tag` | `#mm-tag(color: "blue")[重点]` | 一个行内内容块；color 可选，默认 blue |
-| `mm-question` | `#mm-question(source: "来源", title: [标题], difficulty: 3, id: "q-1")[题干]` | 四个命名参数及一个正文块均可省略；difficulty 仅整数 1–5，source/id 为字符串，title 为行内内容块 |
-| `mm-question-options` | `#mm-question-options(columns: 2, [选项一], [选项二])` | 至少一个内容块；columns 可省略或为整数 1、2、4；自动标记 A、B… |
-| `mm-question-blank` | `#mm-question-blank(width: 4em)` | 不接受正文；width 可省略，默认 4em，须为支持的静态非负长度 |
-| `mm-knowledge` | `#mm-knowledge(slug: "sequence-limit")` | 只接受 slug 字符串；读取当前有效知识点，详见[知识点引用](./knowledge-reference.md) |
-| `mm-test` | `#mm-test` | 无括号和参数，显示 MM TEST，用于检查渲染入口 |
-
-七种 box 均要求且仅接受一个正文内容块，可选参数只有 `title: [补充标题]`。标题只支持行内内容，不能写 `title: "字符串"`、任意颜色参数或位置标题参数。示例：
-
-```typst
-#mm-box-definition(title: [数列极限])[
-  设数列为 $a_n$，定义正文写在这里。
+#mm-box-definition(title: [收敛])[
+  这里写定义，可以包含 $ epsilon > 0 $ 等公式。
 ]
 
-#mm-tag(color: rgb("B22234"))[重点]
+#mm-box-custom(title: [想一想])[
+  你能举出一个满足定义的数列吗？
+]
+```
 
+普通文本、段落、标题、强调、有序/无序/术语列表、原始文本和公式已有适配。`$x^2$` 是行内公式，`$ x^2 $` 是独立公式。数学写法可查 [Typst 数学参考](https://typst.app/docs/reference/math/)，但本站实际能力仍以 Typlet 和预览诊断为准。
+
+部分静态 `text` / `set text` 参数、链接、高亮、对齐、间距、box、block 和 table 也能使用。参数不能任意照搬官方列表：正文不执行变量、函数定义、循环、import/include、包加载、show 规则或页面排版。未适配片段会保留源码并显示行列诊断。
+
+## 内容框和标签
+
+当前共有 **14 个 MM 宏**。下面八种框都接受一个正文内容块，唯一可选参数是 `title: [补充标题]`；不能把它写成字符串标题或另传颜色参数。
+
+| 宏 | 标题 |
+| --- | --- |
+| `mm-box-definition` | 定义 |
+| `mm-box-theorem` | 定理 / 公式 |
+| `mm-box-example` | 例题 |
+| `mm-box-warn` | 提醒 / 易错 |
+| `mm-box-conclusion` | 结论 / 推论 |
+| `mm-box-frequency` | 真题考频 |
+| `mm-box-homework` | 作业 |
+| `mm-box-custom` | 自定义；省略或空标题时不显示标题栏 |
+
+标题只能放行内内容，如文字、行内公式或标签。不要在标题中放表格、独立公式或另一个框。旧 `defbox/thmbox/zt/makitag` 不在当前渲染链路中。
+
+标签写成 `#mm-tag(color: "blue")[重点]`。color 可省略，默认 blue；预设只有 blue、cyan、green、orange、rose、purple，也可用 `rgb("B22234")`。不支持的颜色会提示并回退蓝色，标签正文只接受行内内容。
+
+## 题目、选项和填空
+
+```typst
 #mm-question(source: "练习", title: [选择题], difficulty: 2, id: "limit-01")[
   选择正确的结论。
   #mm-question-options(columns: 2, [$a_n$ 收敛], [$a_n$ 发散])
-  补充说明：#mm-question-blank(width: 6em)
+  说明：#mm-question-blank(width: 6em)
 ]
 ```
 
-`mm-tag` 的预设颜色仅 `blue/cyan/green/orange/rose/purple`；也接受静态 `rgb(...)` / `color.rgb(...)`，例如 `rgb("B22234")`。不支持的颜色或参数会提示并回退默认蓝色；缺少正文则无法按标签渲染。标签正文、box 标题和题目标题不接受独立公式、块级表格等内容。
+| 宏 | 参数规则 |
+| --- | --- |
+| `mm-question` | source、id 为可选字符串；title 为可选行内内容块；difficulty 为可选整数 1–5；正文最多一个块，也可省略 |
+| `mm-question-options` | 至少一个选项内容块；columns 可省略，或为 1、2、4；自动编号 A、B…，窄屏会减少列数 |
+| `mm-question-blank` | 不接受正文；width 可省略，默认 4em，须为支持的静态非负长度 |
 
-选项列数会在窄容器下降为两列或一列，不保证任何屏幕都固定四列。填空只画留白，题目宏不提供自动判分、答案提交或题库记录。
+这些宏只负责显示，不提供答题提交、自动评分或答案记录。`#mm-test` 是不带括号的测试宏，显示 MM TEST。
 
-当前静态长度接受无单位0，或非负pt/mm/cm/in/em/%字面量；tracking另支持负值。fr与计算长度不在适配范围内。
+## 引用公共知识点
+
+```typst
+#mm-knowledge(slug: "sequence-limit")
+```
+
+知识点引用宏只接受一个有效 slug 字符串。在讲义小节编辑器输入 `#mm-knowledge` 或其左括号时，会在受支持位置弹出搜索选择框。选择结果会填入完整代码；注释、字符串和原始文本中的同名文字不会自动触发，选择期间内容变化则需重新选位置。
+
+知识点详情提供复制引用代码和“添加到我的讲义”：选择已有的本地讲义或可编辑在线草稿，再选章节、小节，引用会追加到小节末尾并保存。它不会自动新建缺少的章/节，也不会修改公共知识点正文。
+
+引用读取当前 active 知识点。归档或删除显示缺失占位，其他读取错误可重试；知识点正文中的嵌套引用暂不展开。源码里可以重复引用，服务器不为每处引用生成实例 ID，也不在保存时检查目标。
+
+## 细排版的边界
+
+静态长度支持 0 或非负 pt/mm/cm/in/em/%，tracking 另支持负值；不支持 fr 和计算长度。`text` 支持已适配的字号、颜色、字体、字重、语言、方向及部分 OpenType 参数，实际效果还取决于浏览器和字体。
+
+table 支持静态列数或列宽数组、开头单次表头、单元格跨行跨列及显式位置线条。最多 1000 列、20000 个网格位置，线条不能穿过合并单元格内部；不支持自动定位的 hline/vline。遇到诊断先简化参数，而不是假设整份官方 Typst 项目都能导入运行。

@@ -1,29 +1,41 @@
-# Lecture JSON and section imports
+# Import and export
 
-The portable format exchanges **one complete lecture version**, not all history or a database backup. Online and local use the same format. This round checked source statically without running imports or exports.
+Whole lectures use JSON; batch sections use `.typ`. JSON creates a new lecture, while `.typ` appends sections to the selected chapter.
+
+## One lecture version as JSON
+
+Select the lecture/version in the workbench, save edits, then Export JSON. The file contains that version's metadata, directory, source and cover. It omits ownership, collaborators, review/history/publication state and mastery. References remain slug macros without copied knowledge bodies, so offline expansion is not guaranteed.
+
+Import from the local or online group, check the slug and confirm. Imports create a new lecture rather than overwrite. Resolve slug conflicts by renaming. Online imports become unpublished working drafts; choose the lecture category again. Chapter/section occurrence IDs are regenerated. Check the list before retrying an uncertain result.
+
+All fields below are required, including empty strings. The following is a minimal example.
 
 ```json
 {
   "type": "maki-lecture", "schema_version": 1,
-  "lecture": { "slug": "limits-intro", "title": "Limits", "subtitle": "", "summary": "Introduction", "typst_version": "0.15.1", "metadata": {} },
-  "chapters": [{ "slug": "chapter-1", "tag": "1", "title": "Limits", "summary": "", "sections": [{ "slug": "section-1", "tag": "1.1", "title": "Sequence limits", "summary": "", "source": "#mm-knowledge(slug: \"sequence-limit\")" }] }]
+  "lecture": { "slug": "limits", "title": "Limits", "subtitle": "", "summary": "An introduction", "typst_version": "0.15.1", "metadata": {} },
+  "chapters": [{
+    "slug": "chapter-1", "tag": "1", "title": "Limits", "summary": "",
+    "sections": [{ "slug": "section-1", "tag": "1.1", "title": "Sequence limits", "summary": "", "source": "#mm-knowledge(slug: \"sequence-limit\")" }]
+  }]
 }
 ```
 
-Every field shown is required; unknown fields are rejected. File summary maps to revision.descr in the save API. Files preserve metadata and raw section source, but omit database IDs, occurrence IDs, ownership/collaborators, sessions, history, review/publication/recommendation state and personal annotations/mastery. References remain macro strings, not embedded knowledge bodies; offline files do not guarantee offline reference expansion.
+File summary maps to the API's draft descr. Metadata may include a cover Data URL, extracted and validated on online import with a 512 KiB limit. A local 5 MiB cover may need shrinking before online import. Neither source nor arbitrary metadata is fully sanitized for credentials; do not place secrets in files.
 
-Lecture slug is lowercase letters/digits with separating hyphens, at most100 characters; title200, subtitle500, summary5000, nonempty typst_version50. Chapter/section slugs are nonempty up to100; chapter slugs are unique per file and section slugs per chapter. Directory text fields allow5000 characters, source200000. Limits are100 chapters,200 sections per chapter and2000 total sections. **Online encrypted request bodies are still limited to4MiB**; count limits do not guarantee any combination of source sizes will fit.
+| Limit | Value |
+| --- | --- |
+| Lecture slug/title/subtitle/summary | 100/200/500/5000 characters |
+| Chapter/section slugs | Nonempty, 100; chapter uniqueness per lecture, section uniqueness per chapter |
+| Directory tag/title/summary | 5000 characters each |
+| Section source | 200000 characters |
+| Directory size | 100 chapters, 200 sections per chapter, 2000 total sections |
+| Online request | Entire encrypted body at most 4 MiB, including covers |
 
-The local/online workbench groups import JSON as a new lecture. A changed slug can resolve conflicts; no existing record is overwritten. Online POST `/api/lectures/import` takes the portable document directly, encrypted, assigns the current owner and returns201 `{lecture, revision}` with an unpublished draft. Local import uses browser storage and creates new local and occurrence UUIDs.
+Count limits do not guarantee all maximum-length sources fit together. Unknown fields, legacy blocks/animation and unsupported schema versions are rejected.
 
-GET `/api/lecture-revisions/{id}/export` exports one selected version: public users only the current published approved version, authorized users their readable versions. Archived lectures cannot export. Local exports use persisted records, rejecting incompatible legacy blocks/animations. The UI requires saving before export. Uncertain import results require checking the list before retry; there is no idempotency key.
+## Add sections from files
 
-Metadata may retain a cover. The frontend rejects selected identity/credential key names on export, but neither this nor the backend object-type check sanitizes arbitrary source or metadata. Do not store credentials there.
+Select one or more `.typ` files in an editable chapter. Strict UTF-8 decoding is used; each file becomes one new section. Filename supplies an initial title and slug. Non-Latin filenames may produce an empty slug: fill it before confirming and resolve duplicates in the chapter/batch.
 
-## Batch section imports
-
-An editable chapter accepts one or more `.typ` files, strictly decoded as UTF-8. Each file appends one section in selection order. Filename supplies an initial title and slug; fill missing values and resolve duplicates within the current chapter/import batch. Confirmation only updates the in-memory tree: save the lecture afterward. This is not JSON import or automatic heading-based splitting, and the batch input does not accept PDF/Markdown/arbitrary extensions. Changing the chapter cancels pending file selection.
-
-There is no separate source-file replacement input in the current section editor. Replace an existing section by editing its source and saving. Archived lectures and review snapshots are read-only.
-
-The database lecture-category ID is not portable. Choose the lecture category again after import; imported local/online sections get new occurrence identities.
+Confirmation only appends to current editing state; save the lecture afterward. This input does not accept PDF/Markdown/arbitrary extensions or split files by headings. Changing chapters cancels pending selection. Replace existing section content by editing source; there is no separate source-file replacement input.
