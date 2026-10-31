@@ -1,63 +1,119 @@
 import { defineConfig } from 'vitepress'
 
-const pages = [
-  ['guide/reading', '阅读与掌握记录', 'Reading & mastery'],
-  ['authoring/workbench', '讲义工作台', 'Lecture workbench'],
-  ['authoring/typst-guide', 'Typst 与 MM 宏', 'Typst & MM macros'],
-  ['authoring/import-export', '导入与导出', 'Import & export'],
-  ['guide/admin', '平台管理与审核', 'Administration & review'],
-  ['guide/development', '开发与架构', 'Development & architecture'],
-  ['deploy/self-host', '部署与升级', 'Deployment & upgrades'],
-  ['api/overview', '接口约定', 'API conventions'],
-  ['api/auth', '认证与会话', 'Authentication & sessions'],
-  ['api/knowledge', '知识点 API', 'Knowledge API'],
-  ['api/lectures', '讲义 API', 'Lecture API'],
-  ['api/review', '审核与管理 API', 'Review & management API']
-]
-
-function navigation(english) {
-  const prefix = english ? '/en/' : '/'
-  return pages.map(([path, zh, en]) => ({ text: english ? en : zh, link: prefix + path }))
-}
-
 export default defineConfig({
   base: '/',
   title: 'MakiMath',
-  description: 'MakiMath documentation',
+  description: 'MakiMath',
   locales: {
     root: {
       label: '简体中文',
       lang: 'zh-CN',
-      description: 'MakiMath 使用、开发与接口文档',
+      description: '连接数学知识，让学习与创作相互启发。',
       themeConfig: {
         nav: [
-          { text: '阅读', link: '/guide/reading' },
-          { text: '编写', link: '/authoring/workbench' },
-          { text: '管理', link: '/guide/admin' },
-          { text: '开发与部署', link: '/guide/development' },
-          { text: 'API', link: '/api/overview' }
+          { text: '介绍', link: '/introduction' },
+          { text: '对学习者', link: '/learners' },
+          { text: '对创作者', link: '/creators' },
+          { text: '对开发者', link: '/developers' },
+          { text: '更新日志', link: '/changelog' }
         ],
-        sidebar: navigation(false),
-        docFooter: { prev: '上一篇', next: '下一篇' },
-        outline: { label: '本页大纲' }
+        sidebar: {
+          '/learners': [
+            { text: '为什么我不需要登录？', link: '/learners' },
+            {
+              text: '页面介绍',
+              items: [
+                { text: '开始', link: '/learners/start' },
+                { text: '知识库', link: '/learners/knowledge' },
+                { text: '创意工坊', link: '/learners/workshop' },
+                { text: '我的书架', link: '/learners/bookshelf' },
+                { text: '课程讲义详情', link: '/learners/lecture-details' },
+                { text: '阅读讲义', link: '/learners/reading' },
+                { text: '讲义工作台', link: '/learners/workbench' }
+              ]
+            },
+            { text: '如何发布我的讲义？', link: '/learners/publishing' }
+          ],
+          '/creators': [
+            { text: '对比学习者有什么不同？', link: '/creators' },
+            {
+              text: '开始创作',
+              items: [
+                { text: '组织章节与小节', link: '/creators/structure' },
+                { text: '编写正文与公式', link: '/creators/writing' },
+                { text: '使用MM教学宏', link: '/creators/mm-macros' },
+                { text: '引用知识库', link: '/creators/knowledge-references' },
+                { text: '导入与导出', link: '/creators/import-export' },
+                { text: '保存、版本与审核', link: '/creators/versions-review' },
+                { text: '发布我的讲义', link: '/creators/publishing' }
+              ]
+            }
+          ],
+          '/changelog': [
+            { text: 'v1.2.0-beta', link: '/changelog' },
+            { text: 'v1.1.1-beta', link: '/changelog/v1.1.1-beta' },
+            { text: 'v1.1.0-beta', link: '/changelog/v1.1.0-beta' },
+            { text: 'v1.0.0-beta', link: '/changelog/v1.0.0-beta' }
+          ]
+        }
       }
     },
     en: {
       label: 'English',
       lang: 'en-US',
       link: '/en/',
+      description: 'Connecting mathematical knowledge, inspiring learning and creation.',
       themeConfig: {
         nav: [
-          { text: 'Reading', link: '/en/guide/reading' },
-          { text: 'Authoring', link: '/en/authoring/workbench' },
-          { text: 'Administration', link: '/en/guide/admin' },
-          { text: 'Development & deployment', link: '/en/guide/development' },
-          { text: 'API', link: '/en/api/overview' }
+          { text: 'Introduction', link: '/en/introduction' },
+          { text: 'For Learners', link: '/en/learners' },
+          { text: 'For Creators', link: '/en/creators' },
+          { text: 'For Developers', link: '/en/developers' },
+          { text: 'Changelog', link: '/en/changelog' }
         ],
-        sidebar: navigation(true),
-        docFooter: { prev: 'Previous page', next: 'Next page' },
-        outline: { label: 'On this page' }
+        sidebar: {
+          '/en/learners': [
+            { text: "Why don't I need to sign in?", link: '/en/learners' },
+            {
+              text: 'Page guides',
+              items: [
+                { text: 'Start', link: '/en/learners/start' },
+                { text: 'Knowledge Library', link: '/en/learners/knowledge' },
+                { text: 'Workshop', link: '/en/learners/workshop' },
+                { text: 'My Bookshelf', link: '/en/learners/bookshelf' },
+                { text: 'Course & Lecture Details', link: '/en/learners/lecture-details' },
+                { text: 'Reading Lectures', link: '/en/learners/reading' },
+                { text: 'Lecture Workbench', link: '/en/learners/workbench' }
+              ]
+            },
+            { text: 'How do I publish my lecture?', link: '/en/learners/publishing' }
+          ],
+          '/en/creators': [
+            { text: 'How is this different from learning?', link: '/en/creators' },
+            {
+              text: 'Start creating',
+              items: [
+                { text: 'Organizing Chapters & Sections', link: '/en/creators/structure' },
+                { text: 'Writing Content & Formulas', link: '/en/creators/writing' },
+                { text: 'Using MM Teaching Macros', link: '/en/creators/mm-macros' },
+                { text: 'Referencing the Knowledge Library', link: '/en/creators/knowledge-references' },
+                { text: 'Import & Export', link: '/en/creators/import-export' },
+                { text: 'Saving, Versions & Review', link: '/en/creators/versions-review' },
+                { text: 'Publishing My Lecture', link: '/en/creators/publishing' }
+              ]
+            }
+          ],
+          '/en/changelog': [
+            { text: 'v1.2.0-beta', link: '/en/changelog' },
+            { text: 'v1.1.1-beta', link: '/en/changelog/v1.1.1-beta' },
+            { text: 'v1.1.0-beta', link: '/en/changelog/v1.1.0-beta' },
+            { text: 'v1.0.0-beta', link: '/en/changelog/v1.0.0-beta' }
+          ]
+        }
       }
     }
+  },
+  themeConfig: {
+    sidebar: false
   }
 })

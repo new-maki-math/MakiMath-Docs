@@ -1,15 +1,16 @@
-# MakiMath documentation
+---
+layout: home
 
-Start with [reading and your shelf](./guide/reading.md), or [create a lecture](./authoring/workbench.md). Local authoring works without an account.
+hero:
+  name: "MakiMath"
+  text: "Connecting mathematical knowledge, inspiring learning and creation."
+  tagline: Find guides to using, creating, managing and developing MakiMath, from finding knowledge points and recording mastery to reading and writing lectures.
 
-| Task | Guide |
-| --- | --- |
-| Find knowledge, follow prerequisites, record mastery | [Reading and your shelf](./guide/reading.md) |
-| Write source, formulas and knowledge references | [Typst and MM macros](./authoring/typst-guide.md) |
-| Move lectures between browsers or import section files | [Import and export](./authoring/import-export.md) |
-| Maintain knowledge, review lectures, manage accounts | [Administration](./guide/admin.md) |
-| Work on the projects locally | [Local development](./guide/development.md) |
-| Deploy or update an existing database | [Deployment and upgrades](./deploy/self-host.md) |
-| Connect a client | [API conventions](./api/overview.md) |
-
-These pages describe **v1.1.0-beta**, frontend `e3a2aa1` and backend `62ad91f`. This rewrite used static source inspection; no project, build or tests were run.
+features:
+  - title: Reading & learning
+    details: Find knowledge points, explore their connections, record mastery and read public lectures.
+  - title: Creating & sharing
+    details: Start with a local lecture, write content and reference knowledge points. Learn how to import, export and submit online lectures for review and publication.
+  - title: Administration & development
+    details: Find instructions for maintaining knowledge, reviewing lectures and managing accounts, alongside local development, deployment and API documentation.
+---
