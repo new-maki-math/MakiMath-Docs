@@ -111,6 +111,48 @@ A blank can be written as follows:
 
 `mm-question-blank` takes no body block. `width` is optional and defaults to `4em`. The blank is a display element, not an input for submitting an answer. Questions, options and blanks currently do not provide automatic grading or answer records.
 
+## Reference a question from the question bank
+
+Reference an existing question by its `slug` in a lecture or workbook. The reference displays the question, sources and difficulty, along with its available focus, solution, conclusion and common mistakes. When the same question appears in several papers, use the same `slug` and set `number` to the question number in the current paper.
+
+```typst
+#mm-question(slug: "kaoyan-2010-1-1", number: "Question 1")
+```
+
+The `slug` is the question's identifier in the bank, not its question number or numeric database ID. Replace the example with the actual identifier. `number` is an optional string. A reference takes no body block and cannot be combined with the `source`, `title` or `id` parameters used for a question written directly in the document.
+
+A reference uses the question bank's content by default. Named parameters can adjust this particular occurrence:
+
+| Parameter | Purpose |
+| --- | --- |
+| `difficulty` | Override difficulty with an integer from 1 to 5, or hide it with `false` |
+| `knowledge` | Replace linked knowledge points with a tuple of slug strings, or hide them with `false` |
+| `focus` | Replace the focus with a content block, or hide it with `false` |
+| `solution` | Replace the solution with a content block, or hide it with `false` |
+| `conclusion` | Replace the conclusion with a content block, or hide it with `false` |
+| `pitfalls` | Replace common mistakes with a content block, or hide them with `false` |
+| `tags` | Add tags using a tuple of content blocks or `mm-tag` values |
+
+```typst
+#mm-question(
+  slug: "kaoyan-2010-1-1",
+  number: "Question 1",
+  difficulty: 3,
+  knowledge: ("sequence-limit",),
+  focus: [An additional focus for this section.],
+  solution: false,
+  tags: ([Key point], #mm-tag(color: "green")[Practice]),
+)
+```
+
+Overrides affect only this occurrence; they do not change the question bank. `tags` adds custom tags without removing the question's source tags. Keep the trailing comma in a single-element tuple, and use `[...]` rather than a string for a content block. Do not add a body block after a reference; write surrounding explanation before or after it.
+
+A reference loads the currently available question content. An unavailable question or a failed request is shown as a message. An exported book JSON contains the reference code rather than the question content, so the JSON alone cannot guarantee offline access. Question references inside question content are not expanded recursively.
+
+## Debug macro
+
+`#mm-test` is a renderer debug marker that displays `MM TEST` and takes no parameters. It is generally unnecessary in published content.
+
 ## When should I reference the knowledge library?
 
 Writing a theorem box directly adds ordinary content to this section; it does not automatically create a knowledge library entry or cross-lecture mastery record.

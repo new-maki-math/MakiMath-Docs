@@ -48,7 +48,7 @@ The print action is on the lecture details page. Choose a range and light or dar
 
 The cover is included in the whole-lecture JSON. Online covers are limited to 512 KiB and local covers to 5 MiB; reduce a large local cover before importing it online.
 
-A knowledge reference retains only code such as `#mm-knowledge(slug: "...")`, not the knowledge point's content. You can continue reading public content through the platform, but the JSON alone cannot guarantee that references expand offline. Mastery records do not transfer with the lecture JSON either.
+Knowledge and question references retain only code such as `#mm-knowledge(slug: "...")` or `#mm-question(slug: "...")`, not the referenced content. You can continue reading public content through the platform, but the JSON alone cannot guarantee that references expand offline. Mastery records do not transfer with the lecture JSON either.
 
 If import fails, first check that the file is a lecture workbench export or a `.typ` file accepted by the selected action. Knowledge library import JSON and lecture JSON have different formats. For source that is too long, invalid identifiers or oversized covers, follow the error prompt. A section has a 200,000-character source limit, and whole online imports also have a total request size limit.
 
